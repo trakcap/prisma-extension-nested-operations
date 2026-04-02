@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import type { Types } from "@prisma/client/runtime/library";
+import { get } from "es-toolkit/compat";
 import faker from "faker";
-import { get } from "lodash";
 
 import { type NestedParams, withNestedOperations } from "../../src";
 import type { LogicalOperator, Modifier } from "../../src/lib/types";

@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@open-draft/deferred-promise": "^2.1.0",
-    "lodash": "^4.17.21"
+    "es-toolkit": "^1.45.1"
   },
   "peerDependencies": {
     "@prisma/client": "*"
@@ -45,7 +45,7 @@
     "@biomejs/biome": "^2.4.10",
     "@prisma/client": "^5.0.0",
     "@types/faker": "^5.5.9",
-    "@types/lodash": "^4.14.185",
+    "@types/node": "^24.12.0",
     "dotenv": "^16.0.3",
     "faker": "^5.0.0",
     "prisma": "^5.0.0",

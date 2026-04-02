@@ -1,5 +1,5 @@
 import type { Types } from "@prisma/client/runtime/library";
-import { get, merge, omit, set, unset } from "lodash";
+import { get, merge, omit, set, unset } from "es-toolkit/compat";
 
 import type {
   NestedOperation,

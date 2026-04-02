@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
+import { set } from "es-toolkit/compat";
 import faker from "faker";
-import { set } from "lodash";
 
 import { withNestedOperations } from "../../src";
 import { createParams } from "./helpers/createParams";

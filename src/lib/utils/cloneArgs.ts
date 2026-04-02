@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { cloneDeep, cloneDeepWith } from "lodash";
+import { cloneDeep, cloneDeepWith } from "es-toolkit";
 
 // Prisma v4 requires that instances of Prisma.NullTypes are not cloned,
 // otherwise it will parse them as 'undefined' and the operation will fail.

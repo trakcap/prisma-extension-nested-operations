@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import type { Types } from "@prisma/client/runtime/library";
-import get from "lodash/get";
+import { get } from "es-toolkit/compat";
 
 import type { LogicalOperator, NestedParams, NestedWriteOperation, Target } from "../types";
 import { isWriteOperation, logicalOperators, modifiers, readOperations } from "./operations";
@@ -279,7 +279,7 @@ export function extractRelationWriteOperations<
         .forEach((operation) => {
           /*
             Add single writes passed as a list as separate operations.
-  
+
             Checking if the operation is an array is enough since only lists of
             separate operations are passed as arrays at the top level. For example
             a nested create may be passed as an array but a nested createMany will

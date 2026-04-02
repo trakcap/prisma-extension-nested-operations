@@ -1,6 +1,6 @@
 import { DeferredPromise } from "@open-draft/deferred-promise";
 import type { Types } from "@prisma/client/runtime/library";
-import { omit } from "lodash";
+import { omit } from "es-toolkit/compat";
 
 import type { ExecuteFunction, NestedParams, OperationCall, Target } from "../types";
 import { cloneArgs } from "./cloneArgs";
