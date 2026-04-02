@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
-import type { Prisma } from "@prisma/client";
 import type { Types } from "@prisma/client/runtime/client";
 import { get } from "es-toolkit/compat";
 
+import { Prisma } from "../../prisma/__generated__";
 import { type NestedParams, withNestedOperations } from "../../src";
 import type { DMMFField, LogicalOperator, Modifier } from "../../src/lib/types";
 import { getRelationsByModel } from "../../src/lib/utils/relations";

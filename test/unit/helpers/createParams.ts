@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "../../../prisma/__generated__";
 
 type AnyExtension = { client: any; model: any; query: any; result: any };
 

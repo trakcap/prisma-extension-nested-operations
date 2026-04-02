@@ -26,14 +26,15 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
-    "test:unit": "prisma generate && biome format --fix test/dmmf.ts && vitest run test/unit",
+    "prisma:generate": "prisma generate && biome format --fix test/dmmf.ts",
+    "test:unit": "yarn prisma:generate && vitest run test/unit",
     "test:e2e": "./test/scripts/run-with-postgres.sh vitest run test/e2e",
     "test": "./test/scripts/run-with-postgres.sh vitest run",
     "test:ci": "vitest run",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "lint:ci": "biome ci --reporter=github",
-    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json"
+    "typecheck": "tsc --noEmit && yarn prisma:generate && tsc -p tsconfig.test.json"
   },
   "dependencies": {
     "@open-draft/deferred-promise": "^3.0.0",

@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { Prisma } from "@prisma/client";
 import { set } from "es-toolkit/compat";
 
+import { Prisma } from "../../prisma/__generated__";
 import { withNestedOperations } from "../../src";
 import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
