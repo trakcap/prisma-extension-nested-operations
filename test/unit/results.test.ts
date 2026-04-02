@@ -68,7 +68,7 @@ describe("modifying results", () => {
       Promise.resolve({
         id: faker.datatype.number(),
         email,
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: { email },
@@ -325,7 +325,7 @@ describe("modifying results", () => {
       Promise.resolve({
         id: faker.datatype.number(),
         email,
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: { email },
@@ -356,7 +356,7 @@ describe("modifying results", () => {
       Promise.resolve({
         id: faker.datatype.number(),
         email,
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: { email },
@@ -397,7 +397,7 @@ describe("modifying results", () => {
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -451,7 +451,7 @@ describe("modifying results", () => {
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -504,7 +504,7 @@ describe("modifying results", () => {
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -558,7 +558,7 @@ describe("modifying results", () => {
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -593,10 +593,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -622,7 +619,7 @@ describe("modifying results", () => {
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
       where: { id: faker.datatype.number() },
@@ -665,10 +662,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -695,7 +689,7 @@ describe("modifying results", () => {
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
       where: { id: faker.datatype.number() },
@@ -738,10 +732,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -767,7 +758,7 @@ describe("modifying results", () => {
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
       where: { id: faker.datatype.number() },
@@ -810,10 +801,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -840,7 +828,7 @@ describe("modifying results", () => {
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
       where: { id: faker.datatype.number() },
@@ -917,7 +905,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1013,7 +1001,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1108,7 +1096,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1204,7 +1192,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1265,10 +1253,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile", "Comment"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -1320,7 +1305,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1412,10 +1397,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile", "Comment"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -1468,7 +1450,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1560,10 +1542,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile", "Comment"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -1615,7 +1594,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1707,10 +1686,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile", "Comment"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -1763,7 +1739,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1879,7 +1855,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1948,7 +1924,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -2023,7 +1999,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -2109,7 +2085,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -2177,7 +2153,7 @@ describe("modifying results", () => {
           id: faker.datatype.number(),
           email: faker.internet.email(),
         },
-      })
+      }),
     );
 
     const params = createParams(query, "Post", "findFirst", {
@@ -2232,7 +2208,7 @@ describe("modifying results", () => {
           title: faker.lorem.sentence(),
           author: null,
         },
-      ])
+      ]),
     );
     const params = createParams(query, "Post", "findMany", {
       where: { id: faker.datatype.number() },
@@ -2291,7 +2267,7 @@ describe("modifying results", () => {
             },
           },
         },
-      ])
+      ]),
     );
     const params = createParams(query, "Post", "findMany", {
       where: { id: faker.datatype.number() },
@@ -2353,7 +2329,7 @@ describe("modifying results", () => {
             },
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "findUnique", {
       where: { id: faker.datatype.number() },
@@ -2411,7 +2387,7 @@ describe("modifying results", () => {
             bio: "foo",
           },
         },
-      })
+      }),
     );
     const params = createParams(query, "Post", "update", {
       where: { id: 1 },
@@ -2452,7 +2428,7 @@ describe("modifying results", () => {
           { deleted: true, id: 1, content: "foo" },
           { id: 2, content: "bar" },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "update", {
       where: { id: 1 },
@@ -2499,7 +2475,7 @@ describe("modifying results", () => {
             { id: 6, content: "qux" },
           ],
         },
-      ])
+      ]),
     );
     const params = createParams(query, "Post", "findMany", {
       where: { id: 1 },
@@ -2541,7 +2517,7 @@ describe("modifying results", () => {
             { deleted: true, id: 1, content: "baz" },
           ],
         },
-      })
+      }),
     );
     const params = createParams(query, "Comment", "findUnique", {
       where: { id: 1 },
@@ -2602,7 +2578,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "findUnique", {
       where: { id: 1 },
@@ -2670,7 +2646,7 @@ describe("modifying results", () => {
             replies: [],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "findUnique", {
       where: { id: 1 },
@@ -2737,7 +2713,7 @@ describe("modifying results", () => {
           id: faker.datatype.number(),
           bio: faker.lorem.sentence(),
         },
-      })
+      }),
     );
     const params = createParams(query, "User", "findFirst", {
       where: { id: 1 },

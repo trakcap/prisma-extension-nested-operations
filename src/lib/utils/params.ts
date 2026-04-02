@@ -1,17 +1,19 @@
-import { Types } from "@prisma/client/runtime/library";
-import { merge, omit, get, set, unset } from "lodash";
+import type { Types } from "@prisma/client/runtime/library";
+import { get, merge, omit, set, unset } from "lodash";
 
-import {
-  OperationCall,
+import type {
   NestedOperation,
+  NestedParams,
+  NestedWriteOperation,
+  OperationCall,
+  ReadTarget,
+  Scope,
   Target,
   WriteTarget,
-  Scope,
-  ReadTarget,
-  NestedWriteOperation,
-  NestedParams,
 } from "../types";
-
+import { cloneArgs } from "./cloneArgs";
+import { fieldsByWriteOperation } from "./extractNestedOperations";
+import { isQueryOperation, isReadOperation, isWriteOperation, toOneRelationNonListOperations } from "./operations";
 import {
   buildQueryTargetPath,
   buildReadTargetPath,
@@ -22,18 +24,13 @@ import {
   isWriteTarget,
   targetChainLength,
 } from "./targets";
-import {
-  isQueryOperation,
-  isReadOperation,
-  isWriteOperation,
-  toOneRelationNonListOperations,
-} from "./operations";
-import { cloneArgs } from "./cloneArgs";
-import { fieldsByWriteOperation } from "./extractNestedOperations";
 
-function addWriteToArgs<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
->(args: any, updatedArgs: any, target: WriteTarget, scope?: Scope<ExtArgs>) {
+function addWriteToArgs<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs>(
+  args: any,
+  updatedArgs: any,
+  target: WriteTarget,
+  scope?: Scope<ExtArgs>,
+) {
   const toOneRelation = !scope?.relations.to.isList;
   const targetPath = buildWriteTargetPath(target);
   const targetArgs = get(args, targetPath);
@@ -54,20 +51,13 @@ function addWriteToArgs<
   // createMany operations cannot be turned into arrays of operations so merge
   // their data fields
   if (target.operation === "createMany") {
-    set(
-      args,
-      [...targetPath, "data"],
-      [...targetArgs.data, ...updatedArgs.data]
-    );
+    set(args, [...targetPath, "data"], [...targetArgs.data, ...updatedArgs.data]);
     return;
   }
 
   // to one relations have actions that cannot be turned into arrays of operations
   // so merge their args
-  if (
-    toOneRelation &&
-    toOneRelationNonListOperations.includes(target.operation)
-  ) {
+  if (toOneRelation && toOneRelationNonListOperations.includes(target.operation)) {
     merge(get(args, targetPath), updatedArgs);
     return;
   }
@@ -109,32 +99,23 @@ function removeReadFromArgs(args: any, target: ReadTarget) {
   }
 }
 
-export function assertOperationChangeIsValid(
-  previousOperation: NestedOperation,
-  nextOperation: NestedOperation
-) {
+export function assertOperationChangeIsValid(previousOperation: NestedOperation, nextOperation: NestedOperation) {
   if (isReadOperation(previousOperation) && isWriteOperation(nextOperation)) {
-    throw new Error(
-      "Changing a read action to a write action is not supported"
-    );
+    throw new Error("Changing a read action to a write action is not supported");
   }
 
   if (isWriteOperation(previousOperation) && isReadOperation(nextOperation)) {
-    throw new Error(
-      "Changing a write action to a read action is not supported"
-    );
+    throw new Error("Changing a write action to a read action is not supported");
   }
 
   if (isQueryOperation(previousOperation) && !isQueryOperation(nextOperation)) {
-    throw new Error(
-      "Changing a query action to a non-query action is not supported"
-    );
+    throw new Error("Changing a query action to a non-query action is not supported");
   }
 }
 
 function moveOperationChangesToEnd(
   callA: { target: Target; origin: Target },
-  callB: { target: Target; origin: Target }
+  callB: { target: Target; origin: Target },
 ) {
   if (callA.target.operation !== callA.origin.operation) {
     return 1;
@@ -145,21 +126,16 @@ function moveOperationChangesToEnd(
   return 0;
 }
 
-function findParentCall<Call extends { origin: Target }>(
-  calls: Call[],
-  origin: Target
-): Call | undefined {
+function findParentCall<Call extends { origin: Target }>(calls: Call[], origin: Target): Call | undefined {
   return calls.find(
     (call) =>
-      origin.parentTarget &&
-      buildTargetPath(origin.parentTarget).join(".") ===
-        buildTargetPath(call.origin).join(".")
+      origin.parentTarget && buildTargetPath(origin.parentTarget).join(".") === buildTargetPath(call.origin).join("."),
   );
 }
 
 export function buildArgsFromCalls<
   ExtArgs extends Types.Extensions.InternalArgs,
-  Call extends Omit<OperationCall<ExtArgs>, "queryPromise" | "result">
+  Call extends Omit<OperationCall<ExtArgs>, "queryPromise" | "result">,
 >(calls: Call[], rootParams: NestedParams<ExtArgs>) {
   const finalArgs = cloneArgs(rootParams.args);
 
@@ -182,8 +158,7 @@ export function buildArgsFromCalls<
   sortedCalls.forEach((call, i) => {
     const parentCall = findParentCall(calls.slice(i), call.origin);
     const parentArgs = parentCall?.updatedArgs || finalArgs;
-    const parentOperation =
-      parentCall?.target.operation || rootParams.operation;
+    const parentOperation = parentCall?.target.operation || rootParams.operation;
 
     const origin = omit(call.origin, "parentTarget");
     const target = omit(call.target, "parentTarget");
@@ -256,11 +231,7 @@ export function buildArgsFromCalls<
       }
 
       const basePath = parentCall ? [] : ["where"];
-      set(
-        parentArgs,
-        [...basePath, ...buildQueryTargetPath(target)],
-        call.updatedArgs
-      );
+      set(parentArgs, [...basePath, ...buildQueryTargetPath(target)], call.updatedArgs);
     }
   });
 

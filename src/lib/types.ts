@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
-import { Types } from "@prisma/client/runtime/library";
-import { DeferredPromise } from "@open-draft/deferred-promise";
+import type { DeferredPromise } from "@open-draft/deferred-promise";
+import type { Prisma } from "@prisma/client";
+import type { Types } from "@prisma/client/runtime/library";
 
 export type Modifier = "is" | "isNot" | "some" | "none" | "every";
 export type LogicalOperator = "AND" | "OR" | "NOT";
@@ -19,10 +19,7 @@ export type NestedWriteOperation =
   | "delete"
   | "deleteMany";
 
-export type NestedOperation =
-  | NestedWriteOperation
-  | NestedReadOperation
-  | NestedQueryOperation;
+export type NestedOperation = NestedWriteOperation | NestedReadOperation | NestedQueryOperation;
 
 export type QueryTarget = {
   operation: NestedQueryOperation;
@@ -68,13 +65,12 @@ export type Scope<ExtArgs extends Types.Extensions.InternalArgs> = {
 
 export type NestedParams<ExtArgs extends Types.Extensions.InternalArgs> = {
   query: (args: any, operation?: NestedOperation) => Prisma.PrismaPromise<any>;
-  model: keyof Prisma.TypeMap<ExtArgs>['model'];
+  model: keyof Prisma.TypeMap<ExtArgs>["model"];
   args: any;
   operation: NestedOperation;
   scope?: Scope<ExtArgs>;
 };
 
-export type ExecuteFunction<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
-  T = any
-> = (params: NestedParams<ExtArgs>) => Promise<T>;
+export type ExecuteFunction<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs, T = any> = (
+  params: NestedParams<ExtArgs>,
+) => Promise<T>;

@@ -1,11 +1,7 @@
 const idSymbol = Symbol("id");
 const parentIdSymbol = Symbol("parentId");
 
-function addIdSymbolsToObject(
-  obj: Record<string | symbol, any>,
-  id: number,
-  parentId?: number
-) {
+function addIdSymbolsToObject(obj: Record<string | symbol, any>, id: number, parentId?: number) {
   obj[idSymbol] = id;
   if (parentId) {
     obj[parentIdSymbol] = parentId;
@@ -21,11 +17,7 @@ function stripIdSymbolsFromObject(obj: Record<string | symbol, any>) {
   }
 }
 
-export function addIdSymbolsToResult(
-  result: any,
-  parentId?: number,
-  startId = 1
-): number {
+export function addIdSymbolsToResult(result: any, parentId?: number, startId = 1): number {
   let id = startId;
 
   if (Array.isArray(result)) {
@@ -93,9 +85,7 @@ export function getRelationResult(result: any, relations: string[]): any {
     if (!relationResult) return;
 
     if (Array.isArray(relationResult)) {
-      relationResult = relationResult
-        .flatMap((item) => item[relation])
-        .filter(Boolean);
+      relationResult = relationResult.flatMap((item) => item[relation]).filter(Boolean);
     } else {
       relationResult = relationResult[relation];
     }
@@ -104,23 +94,14 @@ export function getRelationResult(result: any, relations: string[]): any {
   return relationResult;
 }
 
-function injectRelationResult(
-  result: any,
-  relation: string,
-  relationResult: any
-) {
+function injectRelationResult(result: any, relation: string, relationResult: any) {
   if (Array.isArray(relationResult) && Array.isArray(result[relation])) {
-    result[relation] = relationResult.filter(
-      (item) => item[parentIdSymbol] === result[idSymbol]
-    );
+    result[relation] = relationResult.filter((item) => item[parentIdSymbol] === result[idSymbol]);
     return;
   }
 
   if (Array.isArray(relationResult) && !Array.isArray(result[relation])) {
-    result[relation] =
-      relationResult.find(
-        (item) => item[parentIdSymbol] === result[idSymbol]
-      ) || null;
+    result[relation] = relationResult.find((item) => item[parentIdSymbol] === result[idSymbol]) || null;
     return;
   }
 
@@ -131,18 +112,14 @@ function injectRelationResult(
   result[relation] = relationResult;
 }
 
-export function updateResultRelation(
-  result: any,
-  relation: string,
-  relationResult: any
-) {
+export function updateResultRelation(result: any, relation: string, relationResult: any) {
   if (Array.isArray(result)) {
     result.forEach((item) => {
       if (typeof item === "object" && item !== null && item[relation]) {
         injectRelationResult(item, relation, relationResult);
       }
     });
-    
+
     return result;
   }
 

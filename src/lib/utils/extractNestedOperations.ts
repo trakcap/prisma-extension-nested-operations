@@ -1,25 +1,12 @@
-import { Prisma } from "@prisma/client";
-import { Types } from "@prisma/client/runtime/library";
+import type { Prisma } from "@prisma/client";
+import type { Types } from "@prisma/client/runtime/library";
 import get from "lodash/get";
 
-import {
-  LogicalOperator,
-  NestedParams,
-  NestedWriteOperation,
-  Target,
-} from "../types";
-
-import {
-  isWriteOperation,
-  logicalOperators,
-  modifiers,
-  readOperations,
-} from "./operations";
+import type { LogicalOperator, NestedParams, NestedWriteOperation, Target } from "../types";
+import { isWriteOperation, logicalOperators, modifiers, readOperations } from "./operations";
 import { findOppositeRelation, relationsByModel } from "./relations";
 
-type NestedOperationInfo<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
-> = {
+type NestedOperationInfo<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs> = {
   params: NestedParams<ExtArgs>;
   target: Target;
 };
@@ -28,10 +15,7 @@ type NestedOperationInfo<
 // relations are defined directly in the args object because the action is in a
 // to one relation, for example the update action. Add undefined for actions where this
 // can happen
-export const fieldsByWriteOperation: Record<
-  NestedWriteOperation,
-  (string | undefined)[]
-> = {
+export const fieldsByWriteOperation: Record<NestedWriteOperation, (string | undefined)[]> = {
   create: [undefined, "data"],
   update: [undefined, "data"],
   upsert: ["update", "create"],
@@ -45,11 +29,11 @@ export const fieldsByWriteOperation: Record<
 };
 
 export function extractRelationLogicalWhereOperations<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
 >(
   params: NestedParams<ExtArgs>,
   parentTarget?: Target,
-  parentOperations: { logicalOperator: LogicalOperator; index?: number }[] = []
+  parentOperations: { logicalOperator: LogicalOperator; index?: number }[] = [],
 ): NestedOperationInfo[] {
   const relations = relationsByModel[params.model || ""] || [];
   const nestedWhereOperations: NestedOperationInfo[] = [];
@@ -65,11 +49,7 @@ export function extractRelationLogicalWhereOperations<
 
   logicalOperators.forEach((logicalOperator) => {
     const baseArgPath = params.scope ? ["args"] : ["args", "where"];
-    const logicalArg = get(params, [
-      ...baseArgPath,
-      ...operationsPath,
-      logicalOperator,
-    ]);
+    const logicalArg = get(params, [...baseArgPath, ...operationsPath, logicalOperator]);
     if (!logicalArg) return;
 
     const nestedOperators = Array.isArray(logicalArg)
@@ -78,10 +58,7 @@ export function extractRelationLogicalWhereOperations<
 
     nestedOperators.forEach((nestedOperator) => {
       nestedWhereOperations.push(
-        ...extractRelationLogicalWhereOperations(params, parentTarget, [
-          ...parentOperations,
-          nestedOperator,
-        ])
+        ...extractRelationLogicalWhereOperations(params, parentTarget, [...parentOperations, nestedOperator]),
       );
     });
 
@@ -94,10 +71,7 @@ export function extractRelationLogicalWhereOperations<
           const arg = where?.[relation.name];
           if (!arg) return;
 
-          const logicalOperations = [
-            ...parentOperations,
-            { logicalOperator, index },
-          ];
+          const logicalOperations = [...parentOperations, { logicalOperator, index }];
           const foundModifiers = modifiers.filter((mod) => arg[mod]);
 
           // if there are no modifiers call the where action without a modifier
@@ -115,9 +89,7 @@ export function extractRelationLogicalWhereOperations<
                 args: arg,
                 scope: {
                   parentParams: params,
-                  logicalOperators: logicalOperations.map(
-                    (op) => op.logicalOperator
-                  ),
+                  logicalOperators: logicalOperations.map((op) => op.logicalOperator),
                   relations: { to: relation, from: oppositeRelation },
                 },
                 query: params.query,
@@ -145,9 +117,7 @@ export function extractRelationLogicalWhereOperations<
                 scope: {
                   parentParams: params,
                   modifier,
-                  logicalOperators: logicalOperations.map(
-                    (op) => op.logicalOperator
-                  ),
+                  logicalOperators: logicalOperations.map((op) => op.logicalOperator),
                   relations: { to: relation, from: oppositeRelation },
                 },
                 query: params.query,
@@ -179,9 +149,7 @@ export function extractRelationLogicalWhereOperations<
             args: arg,
             scope: {
               parentParams: params,
-              logicalOperators: logicalOperations.map(
-                (op) => op.logicalOperator
-              ),
+              logicalOperators: logicalOperations.map((op) => op.logicalOperator),
               relations: { to: relation, from: oppositeRelation },
             },
             query: params.query,
@@ -207,9 +175,7 @@ export function extractRelationLogicalWhereOperations<
             scope: {
               parentParams: params,
               modifier,
-              logicalOperators: logicalOperations.map(
-                (op) => op.logicalOperator
-              ),
+              logicalOperators: logicalOperations.map((op) => op.logicalOperator),
               relations: { to: relation, from: oppositeRelation },
             },
             query: params.query,
@@ -223,14 +189,11 @@ export function extractRelationLogicalWhereOperations<
 }
 
 export function extractRelationWhereOperations<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
 >(params: NestedParams<ExtArgs>, parentTarget?: Target): NestedOperationInfo[] {
   const relations = relationsByModel[params.model || ""] || [];
 
-  const nestedWhereOperations = extractRelationLogicalWhereOperations(
-    params,
-    parentTarget
-  );
+  const nestedWhereOperations = extractRelationLogicalWhereOperations(params, parentTarget);
 
   relations.forEach((relation) => {
     const model = relation.type as Prisma.ModelName;
@@ -288,16 +251,13 @@ export function extractRelationWhereOperations<
 
   return nestedWhereOperations.concat(
     nestedWhereOperations.flatMap((nestedOperationInfo) =>
-      extractRelationWhereOperations(
-        nestedOperationInfo.params,
-        nestedOperationInfo.target
-      )
-    )
+      extractRelationWhereOperations(nestedOperationInfo.params, nestedOperationInfo.target),
+    ),
   );
 }
 
 export function extractRelationWriteOperations<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
 >(params: NestedParams<ExtArgs>, parentTarget?: Target): NestedOperationInfo[] {
   const relations = relationsByModel[params.model || ""] || [];
 
@@ -311,9 +271,7 @@ export function extractRelationWriteOperations<
     const oppositeRelation = findOppositeRelation(relation);
 
     fields.forEach((field) => {
-      const argPath = ["args", field, relation.name].filter(
-        (part): part is string => !!part
-      );
+      const argPath = ["args", field, relation.name].filter((part): part is string => !!part);
       const arg = get(params, argPath, {});
 
       Object.keys(arg)
@@ -348,8 +306,8 @@ export function extractRelationWriteOperations<
                     },
                     query: params.query,
                   },
-                })
-              )
+                }),
+              ),
             );
             return;
           }
@@ -378,16 +336,13 @@ export function extractRelationWriteOperations<
 
   return nestedWriteOperations.concat(
     nestedWriteOperations.flatMap((nestedOperationInfo) =>
-      extractRelationWriteOperations(
-        nestedOperationInfo.params,
-        nestedOperationInfo.target
-      )
-    )
+      extractRelationWriteOperations(nestedOperationInfo.params, nestedOperationInfo.target),
+    ),
   );
 }
 
 export function extractRelationReadOperations<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
 >(params: NestedParams<ExtArgs>, parentTarget?: Target): NestedOperationInfo[] {
   const relations = relationsByModel[params.model || ""] || [];
   const nestedOperations: NestedOperationInfo[] = [];
@@ -437,12 +392,7 @@ export function extractRelationReadOperations<
           },
         };
         nestedOperations.push(whereOperationInfo);
-        nestedOperations.push(
-          ...extractRelationWhereOperations(
-            whereOperationInfo.params,
-            whereOperationInfo.target
-          )
-        );
+        nestedOperations.push(...extractRelationWhereOperations(whereOperationInfo.params, whereOperationInfo.target));
       }
 
       // push select nested in an include
@@ -489,10 +439,7 @@ export function extractRelationReadOperations<
           };
           nestedOperations.push(whereOperationInfo);
           nestedOperations.push(
-            ...extractRelationWhereOperations(
-              whereOperationInfo.params,
-              whereOperationInfo.target
-            )
+            ...extractRelationWhereOperations(whereOperationInfo.params, whereOperationInfo.target),
           );
         }
       }
@@ -501,17 +448,14 @@ export function extractRelationReadOperations<
 
   return nestedOperations.concat(
     nestedOperations.flatMap((nestedOperation) =>
-      extractRelationReadOperations(
-        nestedOperation.params,
-        nestedOperation.target
-      )
-    )
+      extractRelationReadOperations(nestedOperation.params, nestedOperation.target),
+    ),
   );
 }
 
-export function extractNestedOperations<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
->(params: NestedParams<ExtArgs>): NestedOperationInfo[] {
+export function extractNestedOperations<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs>(
+  params: NestedParams<ExtArgs>,
+): NestedOperationInfo[] {
   return [
     ...extractRelationWhereOperations(params),
     ...extractRelationReadOperations(params),

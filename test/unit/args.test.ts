@@ -54,11 +54,7 @@ describe("args", () => {
           { meta: { equals: Prisma.AnyNull } },
         ],
       },
-      data: [
-        { meta: Prisma.JsonNull },
-        { meta: Prisma.DbNull },
-        { meta: Prisma.AnyNull },
-      ],
+      data: [{ meta: Prisma.JsonNull }, { meta: Prisma.DbNull }, { meta: Prisma.AnyNull }],
     });
     await allOperations(params);
 
@@ -909,9 +905,7 @@ describe("args", () => {
           return params.query({
             ...params.args,
             select: {
-              ...(typeof params.args.select === "boolean"
-                ? {}
-                : params.args.select),
+              ...(typeof params.args.select === "boolean" ? {} : params.args.select),
               content: true,
             },
           });
@@ -1120,10 +1114,7 @@ describe("args", () => {
         if (params.operation === "createMany") {
           return params.query({
             ...params.args,
-            data: [
-              { ...params.args.data[0], number: faker.datatype.number() },
-              { number: faker.datatype.number() },
-            ],
+            data: [{ ...params.args.data[0], number: faker.datatype.number() }, { number: faker.datatype.number() }],
           });
         }
         return params.query(params.args);
@@ -1199,9 +1190,7 @@ describe("args", () => {
 
     await allOperations(params);
 
-    expect(query).toHaveBeenCalledWith(
-      set(params.args, "where.posts.some.comments.some.content", "bar")
-    );
+    expect(query).toHaveBeenCalledWith(set(params.args, "where.posts.some.comments.some.content", "bar"));
   });
 
   it("allows user to modify nested where args by removing a field", async () => {
@@ -1244,7 +1233,7 @@ describe("args", () => {
         updatedAt: {
           gt: expect.any(Date),
         },
-      })
+      }),
     );
   });
 
@@ -1286,7 +1275,7 @@ describe("args", () => {
     expect(query).toHaveBeenCalledWith(
       set(params.args, "where.posts.some.comments.some.content", {
         contains: "bar",
-      })
+      }),
     );
   });
 
@@ -1337,7 +1326,7 @@ describe("args", () => {
     expect(query).toHaveBeenCalledWith(
       set(params.args, "where.posts.some.AND.1.comments.some.content", {
         contains: "bar",
-      })
+      }),
     );
   });
 
@@ -1347,11 +1336,7 @@ describe("args", () => {
         return params.query(params.args);
       },
       $allNestedOperations: (params) => {
-        if (
-          params.operation === "where" &&
-          params.model === "User" &&
-          params.scope
-        ) {
+        if (params.operation === "where" && params.model === "User" && params.scope) {
           return params.query({
             ...params.args,
             ...(params.args.id ? { id: params.args.id + 1 } : {}),
@@ -1409,16 +1394,8 @@ describe("args", () => {
 
     await allOperations(params);
 
-    set(
-      params,
-      "args.where.posts.some.AND.0.NOT.OR.0.AND.0.NOT.OR.0.author.id",
-      3
-    );
-    set(
-      params,
-      "args.where.posts.some.AND.0.NOT.OR.0.comments.some.content",
-      "bar"
-    );
+    set(params, "args.where.posts.some.AND.0.NOT.OR.0.AND.0.NOT.OR.0.author.id", 3);
+    set(params, "args.where.posts.some.AND.0.NOT.OR.0.comments.some.content", "bar");
 
     expect(query).toHaveBeenCalledWith(params.args);
   });
@@ -1453,9 +1430,7 @@ describe("args", () => {
 
     await allOperations(params);
 
-    expect(query).toHaveBeenCalledWith(
-      set(params.args, "include.posts.where.title", "bar")
-    );
+    expect(query).toHaveBeenCalledWith(set(params.args, "include.posts.where.title", "bar"));
   });
 
   it("allows user to modify nested select where args", async () => {
@@ -1488,9 +1463,7 @@ describe("args", () => {
 
     await allOperations(params);
 
-    expect(query).toHaveBeenCalledWith(
-      set(params.args, "select.posts.where.title", "bar")
-    );
+    expect(query).toHaveBeenCalledWith(set(params.args, "select.posts.where.title", "bar"));
   });
 
   it("allows user to modify nested where relation args in nested include where", async () => {
@@ -1528,10 +1501,7 @@ describe("args", () => {
         posts: {
           where: {
             title: "foo",
-            AND: [
-              { author: { id: 1, email: "foo" } },
-              { comments: { every: { content: "foo" } } },
-            ],
+            AND: [{ author: { id: 1, email: "foo" } }, { comments: { every: { content: "foo" } } }],
             OR: [{ NOT: { author: { id: 1, email: "foo" } } }],
             NOT: { comments: { some: { content: "foo" } } },
           },
@@ -1585,10 +1555,7 @@ describe("args", () => {
         posts: {
           where: {
             title: "foo",
-            AND: [
-              { author: { id: 1, email: "foo" } },
-              { comments: { every: { content: "foo" } } },
-            ],
+            AND: [{ author: { id: 1, email: "foo" } }, { comments: { every: { content: "foo" } } }],
             OR: [{ NOT: { author: { id: 1, email: "foo" } } }],
             NOT: { comments: { some: { content: "foo" } } },
           },
@@ -1663,7 +1630,7 @@ describe("args", () => {
     expect(query).toHaveBeenCalledWith(
       set(params.args, "where.posts.some.AND.0.comments.some.content", {
         contains: "bar",
-      })
+      }),
     );
   });
 

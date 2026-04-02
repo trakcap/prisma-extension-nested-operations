@@ -19,7 +19,7 @@ describe("operations", () => {
               create: params.args.data,
               update: params.args.data,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -79,7 +79,7 @@ describe("operations", () => {
             },
           },
         ],
-      })
+      }),
     );
   });
 
@@ -96,7 +96,7 @@ describe("operations", () => {
               create: params.args.data,
               update: params.args.data,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -139,7 +139,7 @@ describe("operations", () => {
             update: params.args.data.posts.update.data,
           },
         ],
-      })
+      }),
     );
   });
 
@@ -173,7 +173,7 @@ describe("operations", () => {
     expect(query).toHaveBeenCalledWith(
       set(params.args, "data.profile", {
         disconnect: true,
-      })
+      }),
     );
   });
 
@@ -191,7 +191,7 @@ describe("operations", () => {
               create: params.args,
               update: params.args,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -203,7 +203,7 @@ describe("operations", () => {
               create: params.args.data,
               update: params.args.data,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -261,7 +261,7 @@ describe("operations", () => {
             },
           },
         },
-      })
+      }),
     );
   });
 
@@ -279,7 +279,7 @@ describe("operations", () => {
                 create: params.args,
                 update: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -289,7 +289,7 @@ describe("operations", () => {
               create: params.args,
               update: params.args,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -338,7 +338,7 @@ describe("operations", () => {
           create: createPostData,
           update: createPostData,
         },
-      })
+      }),
     );
   });
 
@@ -355,7 +355,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: params.args,
               },
-              "update"
+              "update",
             );
           }
 
@@ -385,7 +385,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.create.id },
             data: params.args.data.posts.create,
           },
-        })
+        }),
       );
     });
 
@@ -402,7 +402,7 @@ describe("operations", () => {
                 create: params.args,
                 update: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -432,7 +432,7 @@ describe("operations", () => {
             create: createData,
             update: createData,
           },
-        })
+        }),
       );
     });
 
@@ -466,7 +466,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: { data: [params.args.data.posts.create] },
-        })
+        }),
       );
     });
 
@@ -481,7 +481,7 @@ describe("operations", () => {
               {
                 data: [params.args],
               },
-              "createMany"
+              "createMany",
             );
           }
 
@@ -495,10 +495,7 @@ describe("operations", () => {
         data: {
           email: faker.internet.email(),
           posts: {
-            create: [
-              { title: faker.lorem.sentence() },
-              { title: faker.lorem.sentence() },
-            ],
+            create: [{ title: faker.lorem.sentence() }, { title: faker.lorem.sentence() }],
           },
         },
       });
@@ -508,7 +505,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: { data: params.args.data.posts.create },
-        })
+        }),
       );
     });
 
@@ -524,7 +521,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 create: params.args,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -554,7 +551,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.create.id },
             create: params.args.data.posts.create,
           },
-        })
+        }),
       );
     });
   });
@@ -593,7 +590,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.update.data,
-        })
+        }),
       );
     });
 
@@ -630,7 +627,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: { data: [params.args.data.posts.update.data] },
-        })
+        }),
       );
     });
 
@@ -646,7 +643,7 @@ describe("operations", () => {
                 where: { id: params.args.where.id },
                 create: params.args.data,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -678,7 +675,7 @@ describe("operations", () => {
             where: params.args.data.posts.update.where,
             create: params.args.data.posts.update.data,
           },
-        })
+        }),
       );
     });
 
@@ -717,7 +714,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           updateMany: params.args.data.posts.update,
-        })
+        }),
       );
     });
 
@@ -734,7 +731,7 @@ describe("operations", () => {
                 create: params.args.data,
                 update: params.args.data,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -769,7 +766,7 @@ describe("operations", () => {
             create: updateData,
             update: updateData,
           },
-        })
+        }),
       );
     });
 
@@ -784,7 +781,7 @@ describe("operations", () => {
               {
                 where: { id: params.args.where.id },
               },
-              "delete"
+              "delete",
             );
           }
 
@@ -815,7 +812,7 @@ describe("operations", () => {
           delete: {
             where: params.args.data.posts.update.where,
           },
-        })
+        }),
       );
     });
 
@@ -826,10 +823,7 @@ describe("operations", () => {
         },
         $allNestedOperations: (params) => {
           if (params.operation === "update" && params.model === "Post") {
-            return params.query(
-              { where: { id: params.args.where.id } },
-              "deleteMany"
-            );
+            return params.query({ where: { id: params.args.where.id } }, "deleteMany");
           }
 
           return params.query(params.args);
@@ -859,7 +853,7 @@ describe("operations", () => {
           deleteMany: {
             where: params.args.data.posts.update.where,
           },
-        })
+        }),
       );
     });
   });
@@ -903,7 +897,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.upsert.create,
-        })
+        }),
       );
     });
 
@@ -948,7 +942,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.upsert.map((u: any) => u.create),
-        })
+        }),
       );
     });
 
@@ -993,11 +987,9 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: {
-            data: params.args.data.posts.upsert.map(
-              ({ create }: any) => create
-            ),
+            data: params.args.data.posts.upsert.map(({ create }: any) => create),
           },
-        })
+        }),
       );
     });
 
@@ -1013,7 +1005,7 @@ describe("operations", () => {
                 where: { id: params.args.where.id },
                 data: params.args.update,
               },
-              "update"
+              "update",
             );
           }
 
@@ -1047,10 +1039,8 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          update: params.args.data.posts.upsert.map(
-            ({ where, update }: any) => ({ where, data: update })
-          ),
-        })
+          update: params.args.data.posts.upsert.map(({ where, update }: any) => ({ where, data: update })),
+        }),
       );
     });
 
@@ -1066,7 +1056,7 @@ describe("operations", () => {
                 where: params.args.where,
                 data: params.args.update,
               },
-              "updateMany"
+              "updateMany",
             );
           }
 
@@ -1100,10 +1090,8 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          updateMany: params.args.data.posts.upsert.map(
-            ({ where, update }: any) => ({ where, data: update })
-          ),
-        })
+          updateMany: params.args.data.posts.upsert.map(({ where, update }: any) => ({ where, data: update })),
+        }),
       );
     });
 
@@ -1119,7 +1107,7 @@ describe("operations", () => {
                 where: params.args.where,
                 create: params.args.create,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -1153,10 +1141,8 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          connectOrCreate: params.args.data.posts.upsert.map(
-            ({ where, create }: any) => ({ where, create })
-          ),
-        })
+          connectOrCreate: params.args.data.posts.upsert.map(({ where, create }: any) => ({ where, create })),
+        }),
       );
     });
   });
@@ -1183,10 +1169,7 @@ describe("operations", () => {
           email: faker.internet.email(),
           posts: {
             createMany: {
-              data: [
-                { title: faker.lorem.sentence() },
-                { title: faker.lorem.sentence() },
-              ],
+              data: [{ title: faker.lorem.sentence() }, { title: faker.lorem.sentence() }],
             },
           },
         },
@@ -1197,7 +1180,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.createMany.data,
-        })
+        }),
       );
     });
 
@@ -1213,7 +1196,7 @@ describe("operations", () => {
                 where: { id: data.id },
                 data,
               })),
-              "update"
+              "update",
             );
           }
 
@@ -1245,7 +1228,7 @@ describe("operations", () => {
             where: { id: data.id },
             data,
           })),
-        })
+        }),
       );
     });
 
@@ -1262,7 +1245,7 @@ describe("operations", () => {
                 create: data,
                 update: data,
               })),
-              "upsert"
+              "upsert",
             );
           }
 
@@ -1295,7 +1278,7 @@ describe("operations", () => {
             create: data,
             update: data,
           })),
-        })
+        }),
       );
     });
 
@@ -1310,7 +1293,7 @@ describe("operations", () => {
               params.args.data.map((data: any) => ({
                 id: data.id,
               })),
-              "connect"
+              "connect",
             );
           }
 
@@ -1341,7 +1324,7 @@ describe("operations", () => {
           connect: params.args.data.posts.createMany.data.map((data: any) => ({
             id: data.id,
           })),
-        })
+        }),
       );
     });
 
@@ -1357,7 +1340,7 @@ describe("operations", () => {
                 where: { id: data.id },
                 create: data,
               })),
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -1385,13 +1368,11 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          connectOrCreate: params.args.data.posts.createMany.data.map(
-            (data: any) => ({
-              where: { id: data.id },
-              create: data,
-            })
-          ),
-        })
+          connectOrCreate: params.args.data.posts.createMany.data.map((data: any) => ({
+            where: { id: data.id },
+            create: data,
+          })),
+        }),
       );
     });
   });
@@ -1411,7 +1392,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1437,7 +1418,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.delete.id },
             data: { deleted: true },
           },
-        })
+        }),
       );
     });
 
@@ -1453,7 +1434,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1469,10 +1450,7 @@ describe("operations", () => {
         data: {
           email: faker.internet.email(),
           posts: {
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       });
@@ -1484,7 +1462,7 @@ describe("operations", () => {
             where: del,
             data: { deleted: true },
           })),
-        })
+        }),
       );
     });
 
@@ -1500,7 +1478,7 @@ describe("operations", () => {
                 ...params.args,
                 deleted: true,
               },
-              "update"
+              "update",
             );
           }
 
@@ -1522,9 +1500,7 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { update: { deleted: true } })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { update: { deleted: true } }));
     });
 
     it("can modify deeply nested delete action to be an update", async () => {
@@ -1539,7 +1515,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1573,7 +1549,7 @@ describe("operations", () => {
             where: params.args.data.posts.update.data.comments.delete,
             data: { deleted: true },
           },
-        })
+        }),
       );
     });
 
@@ -1589,7 +1565,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "updateMany"
+              "updateMany",
             );
           }
 
@@ -1608,10 +1584,7 @@ describe("operations", () => {
               data: {
                 title: faker.lorem.sentence(),
                 comments: {
-                  delete: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
                 },
               },
             },
@@ -1622,13 +1595,11 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts.update.data.comments", {
-          updateMany: params.args.data.posts.update.data.comments.delete.map(
-            (del: any) => ({
-              where: del,
-              data: { deleted: true },
-            })
-          ),
-        })
+          updateMany: params.args.data.posts.update.data.comments.delete.map((del: any) => ({
+            where: del,
+            data: { deleted: true },
+          })),
+        }),
       );
     });
 
@@ -1657,10 +1628,7 @@ describe("operations", () => {
               data: {
                 title: faker.lorem.sentence(),
                 comments: {
-                  delete: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
                 },
               },
             },
@@ -1672,7 +1640,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts.update.data.comments", {
           deleteMany: params.args.data.posts.update.data.comments.delete,
-        })
+        }),
       );
     });
   });
@@ -1712,7 +1680,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           delete: params.args.data.posts.delete,
-        })
+        }),
       );
     });
 
@@ -1728,7 +1696,7 @@ describe("operations", () => {
                 where: params.args,
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1742,10 +1710,7 @@ describe("operations", () => {
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       });
@@ -1758,7 +1723,7 @@ describe("operations", () => {
             where: del,
             data: { deleted: true },
           })),
-        })
+        }),
       );
     });
 
@@ -1774,7 +1739,7 @@ describe("operations", () => {
                 where: params.args,
                 data: { deleted: true },
               },
-              "updateMany"
+              "updateMany",
             );
           }
 
@@ -1788,10 +1753,7 @@ describe("operations", () => {
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       });
@@ -1804,7 +1766,7 @@ describe("operations", () => {
             where: del,
             data: { deleted: true },
           })),
-        })
+        }),
       );
     });
   });
@@ -1842,7 +1804,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.connect,
-        })
+        }),
       );
     });
 
@@ -1857,7 +1819,7 @@ describe("operations", () => {
               {
                 data: [params.args],
               },
-              "createMany"
+              "createMany",
             );
           }
           return params.query(params.args);
@@ -1885,7 +1847,7 @@ describe("operations", () => {
           createMany: {
             data: [params.args.data.posts.connect],
           },
-        })
+        }),
       );
     });
 
@@ -1901,7 +1863,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: params.args,
               },
-              "update"
+              "update",
             );
           }
           return params.query(params.args);
@@ -1930,7 +1892,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.connect.id },
             data: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
 
@@ -1946,7 +1908,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: params.args,
               },
-              "updateMany"
+              "updateMany",
             );
           }
           return params.query(params.args);
@@ -1975,7 +1937,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.connect.id },
             data: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
 
@@ -1992,7 +1954,7 @@ describe("operations", () => {
                 update: params.args,
                 create: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
           return params.query(params.args);
@@ -2022,7 +1984,7 @@ describe("operations", () => {
             create: params.args.data.posts.connect,
             update: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
 
@@ -2038,7 +2000,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 create: params.args,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
           return params.query(params.args);
@@ -2067,7 +2029,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.connect.id },
             create: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
   });
@@ -2109,7 +2071,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.connectOrCreate.create,
-        })
+        }),
       );
     });
 
@@ -2124,7 +2086,7 @@ describe("operations", () => {
               {
                 data: [params.args.create],
               },
-              "createMany"
+              "createMany",
             );
           }
           return params.query(params.args);
@@ -2156,7 +2118,7 @@ describe("operations", () => {
           createMany: {
             data: [params.args.data.posts.connectOrCreate.create],
           },
-        })
+        }),
       );
     });
 
@@ -2172,7 +2134,7 @@ describe("operations", () => {
                 where: params.args.where,
                 data: params.args.create,
               },
-              "update"
+              "update",
             );
           }
           return params.query(params.args);
@@ -2205,7 +2167,7 @@ describe("operations", () => {
             where: params.args.data.posts.connectOrCreate.where,
             data: params.args.data.posts.connectOrCreate.create,
           },
-        })
+        }),
       );
     });
 
@@ -2221,7 +2183,7 @@ describe("operations", () => {
                 where: params.args.where,
                 data: params.args.create,
               },
-              "updateMany"
+              "updateMany",
             );
           }
           return params.query(params.args);
@@ -2254,7 +2216,7 @@ describe("operations", () => {
             where: params.args.data.posts.connectOrCreate.where,
             data: params.args.data.posts.connectOrCreate.create,
           },
-        })
+        }),
       );
     });
 
@@ -2271,7 +2233,7 @@ describe("operations", () => {
                 create: params.args.create,
                 update: params.args.create,
               },
-              "upsert"
+              "upsert",
             );
           }
           return params.query(params.args);
@@ -2305,7 +2267,7 @@ describe("operations", () => {
             create: params.args.data.posts.connectOrCreate.create,
             update: params.args.data.posts.connectOrCreate.create,
           },
-        })
+        }),
       );
     });
 
@@ -2345,7 +2307,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           connect: params.args.data.posts.connectOrCreate.where,
-        })
+        }),
       );
     });
   });
@@ -2412,9 +2374,7 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "include.posts", { include: { author: true } })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "include.posts", { include: { author: true } }));
     });
   });
 
@@ -2431,7 +2391,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2472,7 +2432,7 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
@@ -2488,7 +2448,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2508,10 +2468,7 @@ describe("operations", () => {
               where: { id: faker.datatype.number() },
               data: { title: faker.lorem.sentence() },
             },
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       });
@@ -2534,7 +2491,7 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
@@ -2550,7 +2507,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2589,7 +2546,7 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
@@ -2605,7 +2562,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2627,10 +2584,7 @@ describe("operations", () => {
                 data: { title: faker.lorem.sentence() },
               },
             ],
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       });
@@ -2653,7 +2607,7 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
@@ -2669,7 +2623,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2715,7 +2669,7 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
@@ -2735,7 +2689,7 @@ describe("operations", () => {
                   },
                 ],
               },
-              "createMany"
+              "createMany",
             );
           }
 
@@ -2749,7 +2703,7 @@ describe("operations", () => {
                   },
                 ],
               },
-              "createMany"
+              "createMany",
             );
           }
 
@@ -2786,7 +2740,7 @@ describe("operations", () => {
 
       // spread data here as a fix to: https://github.com/facebook/jest/issues/8475
       expect(query).toHaveBeenCalledTimes(1);
-      expect([...query.mock.calls[0]?.[0].data.posts.createMany.data]).toEqual([
+      expect([...(query.mock.calls[0]?.[0].data.posts.createMany.data ?? [])]).toEqual([
         { title: "pre-existing" },
         { title: "first-create", number: 1 },
         { title: "second-create", number: 2 },
@@ -2806,7 +2760,7 @@ describe("operations", () => {
               {
                 create: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
           if (params.operation === "update" && params.scope) {
@@ -2814,7 +2768,7 @@ describe("operations", () => {
               {
                 update: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -2852,7 +2806,7 @@ describe("operations", () => {
               ...params.args.data.profile.update,
             },
           },
-        })
+        }),
       );
     });
 
@@ -2898,7 +2852,7 @@ describe("operations", () => {
             ...params.args.data.profile.update,
             ...params.args.data.profile.upsert.create,
           },
-        })
+        }),
       );
     });
 
@@ -2945,7 +2899,7 @@ describe("operations", () => {
             ...params.args.data.profile.create,
             ...params.args.data.profile.upsert.update,
           },
-        })
+        }),
       );
     });
 
@@ -2960,7 +2914,7 @@ describe("operations", () => {
               {
                 id: params.args.id,
               },
-              "connect"
+              "connect",
             );
           }
 
@@ -2984,7 +2938,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.profile", {
           connect: { id: params.args.data.profile.create.id },
-        })
+        }),
       );
     });
 
@@ -3037,7 +2991,7 @@ describe("operations", () => {
               ...params.args.data.profile.create,
             },
           },
-        })
+        }),
       );
     });
 
@@ -3088,7 +3042,7 @@ describe("operations", () => {
             get(params, "args.data.posts.upsert.0.where"),
             get(params, "args.data.posts.upsert.1.where"),
           ],
-        })
+        }),
       );
     });
 
@@ -3121,9 +3075,7 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { disconnect: false })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { disconnect: false }));
     });
 
     it("replaces existing disconnect false action with new disconnect action", async () => {
@@ -3155,9 +3107,7 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { disconnect: true })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { disconnect: true }));
     });
 
     it("replaces existing delete true action with new delete action", async () => {
@@ -3189,9 +3139,7 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { delete: true })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { delete: true }));
     });
 
     it("replaces existing delete false action with new delete action", async () => {
@@ -3223,9 +3171,7 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { delete: false })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { delete: false }));
     });
 
     it("replaces existing include with select changed to include", async () => {
@@ -3258,7 +3204,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "include.posts", {
           include: { deleted: true },
-        })
+        }),
       );
     });
   });

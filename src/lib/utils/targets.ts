@@ -1,11 +1,4 @@
-import {
-  LogicalOperator,
-  QueryTarget,
-  ReadTarget,
-  Target,
-  WriteTarget,
-} from "../types";
-
+import type { LogicalOperator, QueryTarget, ReadTarget, Target, WriteTarget } from "../types";
 import { isQueryOperation, isReadOperation, isWriteOperation } from "./operations";
 
 export function isQueryTarget(target: any): target is QueryTarget {
@@ -20,23 +13,18 @@ export function isWriteTarget(target: any): target is WriteTarget {
   return isWriteOperation(target.operation);
 }
 
-export function buildOperationsPath(
-  operations?: { logicalOperator: LogicalOperator; index?: number }[]
-) {
+export function buildOperationsPath(operations?: { logicalOperator: LogicalOperator; index?: number }[]) {
   if (!operations) return [];
 
   return operations.flatMap((op) => {
-    if (typeof op.index === "number")
-      return [op.logicalOperator, op.index.toString()];
+    if (typeof op.index === "number") return [op.logicalOperator, op.index.toString()];
 
     return [op.logicalOperator];
   });
 }
 
 export function buildQueryTargetPath(target: QueryTarget): string[] {
-  const path = target.parentTarget
-    ? buildTargetPath(target.parentTarget)
-    : [];
+  const path = target.parentTarget ? buildTargetPath(target.parentTarget) : [];
 
   if (!target.relationName) {
     return [...path, target.operation];

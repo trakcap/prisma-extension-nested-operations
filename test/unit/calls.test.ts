@@ -1,11 +1,11 @@
-import { Prisma } from "@prisma/client";
-import { Types } from "@prisma/client/runtime/library";
+import type { Prisma } from "@prisma/client";
+import type { Types } from "@prisma/client/runtime/library";
 import faker from "faker";
 import { get } from "lodash";
 
-import { withNestedOperations, NestedParams } from "../../src";
+import { type NestedParams, withNestedOperations } from "../../src";
+import type { LogicalOperator, Modifier } from "../../src/lib/types";
 import { relationsByModel } from "../../src/lib/utils/relations";
-import { LogicalOperator, Modifier } from "../../src/lib/types";
 import { createParams } from "./helpers/createParams";
 
 type OperationCall<Model extends Prisma.ModelName> = {
@@ -36,42 +36,26 @@ type OperationCall<Model extends Prisma.ModelName> = {
   logicalOperators?: LogicalOperator[];
 };
 
-function nestedParamsFromCall<Model extends Prisma.ModelName,
-ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
->(
-  rootParams: NestedParams<ExtArgs>,
-  call: OperationCall<Model>
-): NestedParams<ExtArgs> {
-  const params = createParams(
-    query,
-    call.model,
-    call.operation,
-    get(rootParams, call.argsPath)
-  );
+function nestedParamsFromCall<
+  Model extends Prisma.ModelName,
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
+>(rootParams: NestedParams<ExtArgs>, call: OperationCall<Model>): NestedParams<ExtArgs> {
+  const params = createParams(query, call.model, call.operation, get(rootParams, call.argsPath));
   return {
     ...params,
     scope: {
       modifier: call.modifier,
       logicalOperators: call.logicalOperators,
       relations: call.relations,
-      parentParams: call.scope
-        ? nestedParamsFromCall(rootParams, call.scope)
-        : rootParams,
+      parentParams: call.scope ? nestedParamsFromCall(rootParams, call.scope) : rootParams,
     },
   };
 }
 
-function getModelRelation<Model extends Prisma.ModelName>(
-  model: Model,
-  relationName: string
-): Prisma.DMMF.Field {
-  const modelRelation = relationsByModel[model]?.find(
-    (relation) => relation.name === relationName
-  );
+function getModelRelation<Model extends Prisma.ModelName>(model: Model, relationName: string): Prisma.DMMF.Field {
+  const modelRelation = relationsByModel[model]?.find((relation) => relation.name === relationName);
   if (!modelRelation) {
-    throw new Error(
-      `Unable to find relation ${relationName} on model ${model}`
-    );
+    throw new Error(`Unable to find relation ${relationName} on model ${model}`);
   }
   return modelRelation;
 }
@@ -689,10 +673,7 @@ describe("calls", () => {
         data: {
           email: faker.internet.email(),
           posts: {
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       }),
@@ -727,10 +708,7 @@ describe("calls", () => {
         update: {
           email: faker.internet.email(),
           posts: {
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       }),
@@ -1046,10 +1024,7 @@ describe("calls", () => {
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       }),
@@ -1110,10 +1085,7 @@ describe("calls", () => {
         update: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
           },
         },
       }),
@@ -1311,10 +1283,7 @@ describe("calls", () => {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
-                  delete: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  delete: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
                 },
               },
             },
@@ -1688,10 +1657,7 @@ describe("calls", () => {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
-                  deleteMany: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  deleteMany: [{ id: faker.datatype.number() }, { id: faker.datatype.number() }],
                 },
               },
             },
@@ -3486,8 +3452,7 @@ describe("calls", () => {
       ],
     },
     {
-      description:
-        "where deeply nested in logical operators with no interim relations",
+      description: "where deeply nested in logical operators with no interim relations",
       rootParams: createParams(query, "User", "findMany", {
         where: {
           NOT: {
@@ -4022,8 +3987,7 @@ describe("calls", () => {
         {
           operation: "where",
           model: "User",
-          argsPath:
-            "args.include.posts.where.comments.some.repliedTo.is.author",
+          argsPath: "args.include.posts.where.comments.some.repliedTo.is.author",
           relations: {
             to: getModelRelation("Comment", "author"),
             from: getModelRelation("User", "comments"),
@@ -4114,30 +4078,27 @@ describe("calls", () => {
         },
       ],
     },
-  ])(
-    "calls middleware with $description",
-    async ({ rootParams, nestedCalls = [] }) => {
-      const $rootOperation = jest.fn((params) => params.query(params.args));
-      const $allNestedOperations = jest.fn((params) => params.query(params.args));
-      const allOperations = withNestedOperations({
-        $rootOperation,
-        $allNestedOperations,
-      });
+  ])("calls middleware with $description", async ({ rootParams, nestedCalls = [] }) => {
+    const $rootOperation = jest.fn((params) => params.query(params.args));
+    const $allNestedOperations = jest.fn((params) => params.query(params.args));
+    const allOperations = withNestedOperations({
+      $rootOperation,
+      $allNestedOperations,
+    });
 
-      await allOperations(rootParams as any);
+    await allOperations(rootParams as any);
 
-      expect($rootOperation).toHaveBeenCalledTimes(1);
-      expect($rootOperation).toHaveBeenCalledWith({
-        ...rootParams,
+    expect($rootOperation).toHaveBeenCalledTimes(1);
+    expect($rootOperation).toHaveBeenCalledWith({
+      ...rootParams,
+      query: expect.any(Function),
+    });
+    expect($allNestedOperations).toHaveBeenCalledTimes(nestedCalls.length);
+    nestedCalls.forEach((call) => {
+      expect($allNestedOperations).toHaveBeenCalledWith({
+        ...nestedParamsFromCall(rootParams, call),
         query: expect.any(Function),
       });
-      expect($allNestedOperations).toHaveBeenCalledTimes(nestedCalls.length);
-      nestedCalls.forEach((call) => {
-        expect($allNestedOperations).toHaveBeenCalledWith({
-          ...nestedParamsFromCall(rootParams, call),
-          query: expect.any(Function),
-        });
-      });
-    }
-  );
+    });
+  });
 });

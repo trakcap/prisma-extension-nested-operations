@@ -1,6 +1,5 @@
-import { Post, Prisma, User } from "@prisma/client";
+import { type Post, Prisma, type User } from "@prisma/client";
 import faker from "faker";
-import { set } from "lodash";
 
 import { withNestedOperations } from "../../src";
 import client from "./client";
@@ -184,9 +183,7 @@ describe("smoke", () => {
     });
 
     it("calls middleware with groupBy action", async () => {
-      await expect(testClient.comment.findMany()).rejects.toThrowError(
-        "expected groupBy action"
-      );
+      await expect(testClient.comment.findMany()).rejects.toThrowError("expected groupBy action");
 
       const groupBy = await testClient.comment.groupBy({
         by: ["authorId"],
