@@ -20,7 +20,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -45,7 +45,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "Profile", "updateMany", {
       where: {
         OR: [
@@ -84,7 +84,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve({}));
+    const query = vi.fn((_: any) => Promise.resolve({}));
     const params = createParams(query, "User", "create", {
       data: { email: faker.internet.email() },
     });
@@ -116,7 +116,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: { email: faker.internet.email() },
     });
@@ -147,7 +147,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -189,7 +189,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -230,7 +230,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -282,7 +282,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -357,7 +357,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -411,7 +411,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -450,7 +450,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -551,7 +551,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -662,7 +662,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -702,7 +702,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -749,7 +749,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -809,7 +809,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -862,7 +862,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -914,7 +914,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -978,7 +978,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -1024,7 +1024,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -1075,7 +1075,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -1121,7 +1121,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -1173,7 +1173,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findMany", {
       where: {
         posts: {
@@ -1211,7 +1211,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findMany", {
       where: {
         posts: {
@@ -1255,7 +1255,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findMany", {
       where: {
         posts: {
@@ -1297,7 +1297,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findMany", {
       where: {
         posts: {
@@ -1353,7 +1353,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findMany", {
       where: {
         posts: {
@@ -1416,7 +1416,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findUnique", {
       where: { id: 1 },
       include: {
@@ -1449,7 +1449,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findUnique", {
       where: { id: 1 },
       select: {
@@ -1494,7 +1494,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findUnique", {
       where: { id: 1 },
       include: {
@@ -1548,7 +1548,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findUnique", {
       where: { id: 1 },
       select: {
@@ -1592,7 +1592,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "findMany", {
       where: {
         posts: {
@@ -1660,7 +1660,7 @@ describe("args", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),

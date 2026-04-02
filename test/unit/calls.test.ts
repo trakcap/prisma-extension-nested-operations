@@ -64,8 +64,8 @@ const query = (_: any) => Promise.resolve({});
 
 describe("calls", () => {
   it("calls middleware once when there are no nested operations", async () => {
-    const $rootOperation = jest.fn((params) => params.query(params.args));
-    const $allNestedOperations = jest.fn((params) => params.query(params.args));
+    const $rootOperation = vi.fn((params) => params.query(params.args));
+    const $allNestedOperations = vi.fn((params) => params.query(params.args));
     const allOperations = withNestedOperations({
       $rootOperation,
       $allNestedOperations,
@@ -4079,8 +4079,8 @@ describe("calls", () => {
       ],
     },
   ])("calls middleware with $description", async ({ rootParams, nestedCalls = [] }) => {
-    const $rootOperation = jest.fn((params) => params.query(params.args));
-    const $allNestedOperations = jest.fn((params) => params.query(params.args));
+    const $rootOperation = vi.fn((params) => params.query(params.args));
+    const $allNestedOperations = vi.fn((params) => params.query(params.args));
     const allOperations = withNestedOperations({
       $rootOperation,
       $allNestedOperations,

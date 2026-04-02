@@ -26,7 +26,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() => Promise.resolve(null));
+    const query = vi.fn(() => Promise.resolve(null));
     const params = createParams(query, "User", "findUnique", {
       where: { id: faker.datatype.number() },
     });
@@ -45,7 +45,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() => Promise.resolve(1));
+    const query = vi.fn(() => Promise.resolve(1));
     const params = createParams(query, "User", "count", {});
     const result = await allOperations(params);
 
@@ -64,7 +64,7 @@ describe("modifying results", () => {
 
     const email = faker.internet.email();
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email,
@@ -139,7 +139,7 @@ describe("modifying results", () => {
         comments: null,
       },
     ];
-    const query = jest.fn(() => Promise.resolve(clientResult));
+    const query = vi.fn(() => Promise.resolve(clientResult));
     const params = createParams(query, "Post", "findMany", {
       where: { title: faker.lorem.sentence() },
       include: {
@@ -196,7 +196,7 @@ describe("modifying results", () => {
         comments: null,
       },
     ];
-    const query = jest.fn(() => Promise.resolve(clientResult));
+    const query = vi.fn(() => Promise.resolve(clientResult));
     const params = createParams(query, "Post", "findMany", {
       where: { title: faker.lorem.sentence() },
       select: {
@@ -283,7 +283,7 @@ describe("modifying results", () => {
         comments: null,
       },
     ];
-    const query = jest.fn(() => Promise.resolve(clientResult));
+    const query = vi.fn(() => Promise.resolve(clientResult));
     const params = createParams(query, "Post", "findMany", {
       where: { title: faker.lorem.sentence() },
       include: {
@@ -321,7 +321,7 @@ describe("modifying results", () => {
     });
 
     const email = faker.internet.email();
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email,
@@ -352,7 +352,7 @@ describe("modifying results", () => {
     });
 
     const email = faker.internet.email();
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email,
@@ -387,7 +387,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -441,7 +441,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -494,7 +494,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -548,7 +548,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -601,7 +601,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -671,7 +671,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -740,7 +740,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -810,7 +810,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -879,7 +879,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -975,7 +975,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -1070,7 +1070,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -1166,7 +1166,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -1261,7 +1261,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -1406,7 +1406,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -1550,7 +1550,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -1695,7 +1695,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),
@@ -1839,7 +1839,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -1908,7 +1908,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -1977,7 +1977,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -2063,7 +2063,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: args.data.email,
@@ -2145,7 +2145,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         title: faker.lorem.sentence(),
@@ -2184,7 +2184,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve([
         {
           id: faker.datatype.number(),
@@ -2253,7 +2253,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve([
         {
           id: faker.datatype.number(),
@@ -2307,7 +2307,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         title: faker.lorem.sentence(),
@@ -2377,7 +2377,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         author: {
           deleted: true,
@@ -2422,7 +2422,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         comments: [
           { deleted: true, id: 1, content: "foo" },
@@ -2459,7 +2459,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve([
         {
           id: 1,
@@ -2506,7 +2506,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: 1,
         content: "foo",
@@ -2556,7 +2556,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: 1,
         content: "foo",
@@ -2625,7 +2625,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: 1,
         comments: [
@@ -2699,7 +2699,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: faker.datatype.number(),
         email: faker.internet.email(),

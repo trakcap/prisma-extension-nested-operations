@@ -91,7 +91,7 @@
         }
       },
       "javascript": {
-        "globals": ["jest"]
+        "globals": ["vi"]
       }
     }
   ]

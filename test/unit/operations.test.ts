@@ -37,7 +37,7 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -104,7 +104,7 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -157,7 +157,7 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -211,7 +211,7 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
@@ -297,7 +297,7 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
       where: { id: faker.datatype.number() },
       data: {
@@ -363,7 +363,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -410,7 +410,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -450,7 +450,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -489,7 +489,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -529,7 +529,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -571,7 +571,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -608,7 +608,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -651,7 +651,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -693,7 +693,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -739,7 +739,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -789,7 +789,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -830,7 +830,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -873,7 +873,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -915,7 +915,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -960,7 +960,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1013,7 +1013,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1064,7 +1064,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1115,7 +1115,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1162,7 +1162,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1204,7 +1204,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1253,7 +1253,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1301,7 +1301,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1348,7 +1348,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1400,7 +1400,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1442,7 +1442,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
           id: faker.datatype.number(),
@@ -1486,7 +1486,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
           id: faker.datatype.number(),
@@ -1523,7 +1523,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1573,7 +1573,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1617,7 +1617,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1660,7 +1660,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1704,7 +1704,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1747,7 +1747,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -1785,7 +1785,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -1826,7 +1826,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -1870,7 +1870,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -1915,7 +1915,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -1961,7 +1961,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2007,7 +2007,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2048,7 +2048,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2093,7 +2093,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2141,7 +2141,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2190,7 +2190,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2240,7 +2240,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2284,7 +2284,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
@@ -2327,7 +2327,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "findUnique", {
         where: { id: faker.datatype.number() },
         include: {
@@ -2361,7 +2361,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "findUnique", {
         where: { id: faker.datatype.number() },
         include: {
@@ -2399,7 +2399,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
           id: faker.datatype.number(),
@@ -2456,7 +2456,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
           id: faker.datatype.number(),
@@ -2515,7 +2515,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -2570,7 +2570,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
           id: faker.datatype.number(),
@@ -2631,7 +2631,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
           id: faker.datatype.number(),
@@ -2711,7 +2711,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -2776,7 +2776,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -2827,7 +2827,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -2874,7 +2874,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -2922,7 +2922,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -2960,7 +2960,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -3009,7 +3009,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -3060,7 +3060,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -3092,7 +3092,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -3124,7 +3124,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -3156,7 +3156,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: { id: faker.datatype.number() },
         data: {
@@ -3188,7 +3188,7 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "findUnique", {
         where: { id: faker.datatype.number() },
         include: {

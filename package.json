@@ -26,9 +26,9 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
-    "test:unit": "prisma generate && jest --config jest.config.unit.js",
-    "test:e2e": "./test/scripts/run-with-postgres.sh jest --config jest.config.e2e.js --runInBand",
-    "test": "./test/scripts/run-with-postgres.sh jest --runInBand",
+    "test:unit": "prisma generate && vitest run test/unit",
+    "test:e2e": "./test/scripts/run-with-postgres.sh vitest run test/e2e",
+    "test": "./test/scripts/run-with-postgres.sh vitest run",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "lint:ci": "biome ci --reporter=github",
@@ -45,14 +45,11 @@
     "@biomejs/biome": "^2.4.10",
     "@prisma/client": "^5.0.0",
     "@types/faker": "^5.5.9",
-    "@types/jest": "^29.2.5",
     "@types/lodash": "^4.14.185",
     "dotenv": "^16.0.3",
     "faker": "^5.0.0",
-    "jest": "^29.3.1",
     "prisma": "^5.0.0",
-    "ts-jest": "^29.0.3",
-    "ts-node": "^9.1.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.2"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2023"],
+    "rootDir": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "module": "ES2022",
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "es2023",
+    "types": ["vitest/globals"]
+  }
+}

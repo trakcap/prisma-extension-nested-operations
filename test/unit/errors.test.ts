@@ -64,7 +64,7 @@ describe("errors", () => {
       },
     });
 
-    const query = jest.fn(() => {
+    const query = vi.fn(() => {
       return createAsyncError();
     });
     const params = createParams(query, "User", "create", {
