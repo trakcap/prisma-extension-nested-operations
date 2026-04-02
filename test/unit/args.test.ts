@@ -63,11 +63,11 @@ describe("args", () => {
     await allOperations(params);
 
     expect(query).toHaveBeenCalledWith(params.args);
-    expect(query.mock.calls[0][0].where.OR).toHaveLength(3);
-    query.mock.calls[0][0].where.OR.forEach(({ meta }: any, index: number) => {
+    expect(query.mock.calls[0]?.[0].where.OR).toHaveLength(3);
+    query.mock.calls[0]?.[0].where.OR.forEach(({ meta }: any, index: number) => {
       expect(meta.equals).toBe(params.args.where.OR[index].meta.equals);
     });
-    query.mock.calls[0][0].data.forEach(({ meta }: any, index: number) => {
+    query.mock.calls[0]?.[0].data.forEach(({ meta }: any, index: number) => {
       expect(meta).toBe(params.args.data[index].meta);
     });
   });

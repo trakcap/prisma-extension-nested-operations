@@ -2786,7 +2786,7 @@ describe("operations", () => {
 
       // spread data here as a fix to: https://github.com/facebook/jest/issues/8475
       expect(query).toHaveBeenCalledTimes(1);
-      expect([...query.mock.calls[0][0].data.posts.createMany.data]).toEqual([
+      expect([...query.mock.calls[0]?.[0].data.posts.createMany.data]).toEqual([
         { title: "pre-existing" },
         { title: "first-create", number: 1 },
         { title: "second-create", number: 2 },

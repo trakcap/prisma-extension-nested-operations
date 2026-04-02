@@ -131,7 +131,7 @@ export function withNestedOperations<
           if (nextUpdate) {
             updateResultRelation(
               nextUpdate.updatedResult,
-              relationsPath[relationsPath.length - 1],
+              relationsPath.at(-1)!,
               updatedResult
             );
             return;
@@ -139,7 +139,7 @@ export function withNestedOperations<
 
           updateResultRelation(
             result,
-            relationsPath[relationsPath.length - 1],
+            relationsPath.at(-1)!,
             updatedResult
           );
         });

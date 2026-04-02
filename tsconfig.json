@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "es2019",
-    "module": "commonjs",
-    "strict": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2023"],
+    "rootDir": "./src",
     "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist",
+    "module": "ES2022",
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "noEmit": true
-  },
-  "exclude": ["test"]
+    "strict": true,
+    "target": "es2023"
+  }
 }

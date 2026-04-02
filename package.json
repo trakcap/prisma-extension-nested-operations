@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "module": "dist/esm/index.js",
   "scripts": {
-    "build": "npm-run-all build:cjs build:esm",
+    "build": "rm -rf dist && tsc",
     "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
     "build:cjs": "tsc -p tsconfig.build.json",
     "build:esm": "tsc -p tsconfig.esm.json",
@@ -55,7 +55,7 @@
     "semantic-release": "^17.0.2",
     "ts-jest": "^29.0.3",
     "ts-node": "^9.1.1",
-    "typescript": "^4.1.3"
+    "typescript": "^5.9.3"
   },
   "repository": {
     "type": "git",

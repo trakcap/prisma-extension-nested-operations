@@ -13,7 +13,7 @@ Prisma.dmmf.datamodel.models.forEach((model: Prisma.DMMF.Model) => {
   );
 });
 
-export function findOppositeRelation(relation: Prisma.DMMF.Field) {
+export function findOppositeRelation(relation: Prisma.DMMF.Field):Prisma.DMMF.Field {
   const parentRelations =
     relationsByModel[relation.type as Prisma.ModelName] || [];
 
