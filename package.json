@@ -7,6 +7,7 @@
   "module": "dist/esm/index.js",
   "scripts": {
     "build": "npm-run-all build:cjs build:esm",
+    "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
     "build:cjs": "tsc -p tsconfig.build.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "test:unit": "prisma generate && jest --config jest.config.unit.js",
