@@ -1,6 +1,6 @@
+import { faker } from "@faker-js/faker";
 import { Prisma } from "@prisma/client";
 import { set } from "es-toolkit/compat";
-import faker from "faker";
 
 import { withNestedOperations } from "../../src";
 import { createParams } from "./helpers/createParams";
@@ -140,7 +140,7 @@ describe("args", () => {
         if (params.model === "Post") {
           return params.query({
             ...params.args,
-            number: faker.datatype.number(),
+            number: faker.number.float(),
           });
         }
         return params.query(params.args);
@@ -182,7 +182,7 @@ describe("args", () => {
           await wait(100);
           return params.query({
             ...params.args,
-            number: faker.datatype.number(),
+            number: faker.number.float(),
           });
         }
         return params.query(params.args);
@@ -284,12 +284,12 @@ describe("args", () => {
 
     const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         comments: {
           update: {
-            where: { id: faker.datatype.number() },
+            where: { id: faker.number.float() },
             data: {
               content: "1",
               repliedTo: {
@@ -359,17 +359,17 @@ describe("args", () => {
 
     const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
           update: [
             {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: { title: "first" },
             },
             {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: { title: "second" },
             },
           ],
@@ -413,7 +413,7 @@ describe("args", () => {
 
     const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
@@ -452,31 +452,31 @@ describe("args", () => {
 
     const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
           update: [
             {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: "first",
                 comments: {
                   create: {
                     content: "first post comment",
-                    authorId: faker.datatype.number(),
+                    authorId: faker.number.float(),
                   },
                 },
               },
             },
             {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: "second",
                 comments: {
                   create: {
                     content: "second post comment",
-                    authorId: faker.datatype.number(),
+                    authorId: faker.number.float(),
                   },
                 },
               },
@@ -553,7 +553,7 @@ describe("args", () => {
 
     const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
@@ -564,11 +564,11 @@ describe("args", () => {
                 create: [
                   {
                     content: "first post comment",
-                    authorId: faker.datatype.number(),
+                    authorId: faker.number.float(),
                   },
                   {
                     content: "second post comment",
-                    authorId: faker.datatype.number(),
+                    authorId: faker.number.float(),
                   },
                 ],
               },
@@ -579,11 +579,11 @@ describe("args", () => {
                 create: [
                   {
                     content: "first post comment",
-                    authorId: faker.datatype.number(),
+                    authorId: faker.number.float(),
                   },
                   {
                     content: "second post comment",
-                    authorId: faker.datatype.number(),
+                    authorId: faker.number.float(),
                   },
                 ],
               },
@@ -965,11 +965,11 @@ describe("args", () => {
             data: [
               ...params.args.data.map((data: any) => ({
                 ...data,
-                number: faker.datatype.number(),
+                number: faker.number.float(),
               })),
               {
                 content: faker.lorem.sentence(),
-                number: faker.datatype.number(),
+                number: faker.number.float(),
               },
             ],
           });
@@ -1062,11 +1062,11 @@ describe("args", () => {
             data: [
               ...params.args.data.map((data: any) => ({
                 ...data,
-                number: faker.datatype.number(),
+                number: faker.number.float(),
               })),
               {
                 content: faker.lorem.sentence(),
-                number: faker.datatype.number(),
+                number: faker.number.float(),
               },
             ],
           });
@@ -1114,7 +1114,7 @@ describe("args", () => {
         if (params.operation === "createMany") {
           return params.query({
             ...params.args,
-            data: [{ ...params.args.data[0], number: faker.datatype.number() }, { number: faker.datatype.number() }],
+            data: [{ ...params.args.data[0], number: faker.number.float() }, { number: faker.number.float() }],
           });
         }
         return params.query(params.args);
@@ -1644,7 +1644,7 @@ describe("args", () => {
           await wait(100);
           return params.query({
             ...params.args,
-            number: faker.datatype.number(),
+            number: faker.number.float(),
           });
         }
 
@@ -1652,7 +1652,7 @@ describe("args", () => {
           await wait(200);
           return params.query({
             ...params.args,
-            number: faker.datatype.number(),
+            number: faker.number.float(),
           });
         }
 
@@ -1670,7 +1670,7 @@ describe("args", () => {
             comments: {
               create: {
                 content: faker.lorem.sentence(),
-                authorId: faker.datatype.number(),
+                authorId: faker.number.float(),
               },
             },
           },

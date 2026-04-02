@@ -1,5 +1,5 @@
+import { faker } from "@faker-js/faker";
 import { type Post, Prisma, type User } from "@prisma/client";
-import faker from "faker";
 
 import { withNestedOperations } from "../../src";
 import client from "./client";

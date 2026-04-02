@@ -1,4 +1,4 @@
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 
 import { withNestedOperations } from "../../src";
 import { createParams } from "./helpers/createParams";

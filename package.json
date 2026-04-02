@@ -35,7 +35,7 @@
     "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@open-draft/deferred-promise": "^2.1.0",
+    "@open-draft/deferred-promise": "^3.0.0",
     "es-toolkit": "^1.45.1"
   },
   "peerDependencies": {
@@ -43,13 +43,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
+    "@faker-js/faker": "^10.4.0",
     "@prisma/client": "^5.0.0",
-    "@types/faker": "^5.5.9",
     "@types/node": "^24.12.0",
-    "dotenv": "^16.0.3",
-    "faker": "^5.0.0",
     "prisma": "^5.0.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vitest": "^4.1.2"
   }
 }
