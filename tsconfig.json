@@ -1,21 +1,8 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["es2023"],
     "rootDir": "./src",
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "./dist",
-    "module": "ES2022",
-    "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es2023"
+    "outDir": "./dist"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"]
 }

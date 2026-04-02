@@ -32,7 +32,7 @@
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "lint:ci": "biome ci --reporter=github",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json"
   },
   "dependencies": {
     "@open-draft/deferred-promise": "^2.1.0",
