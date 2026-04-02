@@ -2,12 +2,14 @@ import { faker } from "@faker-js/faker";
 import { get, set } from "es-toolkit/compat";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 
 describe("operations", () => {
   it("applies query to operations moved to new action type", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -85,6 +87,7 @@ describe("operations", () => {
 
   it("merges operation converted to existing operation correctly when converted operation defined before target operation", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -145,6 +148,7 @@ describe("operations", () => {
 
   it("replaces existing boolean action with new action when existing is defined before source action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -179,6 +183,7 @@ describe("operations", () => {
 
   it("waits for all queries to finish before calling root query when modifying nested action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -267,6 +272,7 @@ describe("operations", () => {
 
   it("can modify deeply nested operations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -345,6 +351,7 @@ describe("operations", () => {
   describe("create", () => {
     it("can modify nested create action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -391,6 +398,7 @@ describe("operations", () => {
 
     it("can modify nested create action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -438,6 +446,7 @@ describe("operations", () => {
 
     it("can modify nested create action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -472,6 +481,7 @@ describe("operations", () => {
 
     it("can modify nested create action array to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -511,6 +521,7 @@ describe("operations", () => {
 
     it("can modify nested create action to be a connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -559,6 +570,7 @@ describe("operations", () => {
   describe("update", () => {
     it("can modify nested update action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -596,6 +608,7 @@ describe("operations", () => {
 
     it("can modify nested update action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -633,6 +646,7 @@ describe("operations", () => {
 
     it("can modify nested update action to be a connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -681,6 +695,7 @@ describe("operations", () => {
 
     it("can modify nested update action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -720,6 +735,7 @@ describe("operations", () => {
 
     it("can modify nested update action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -772,6 +788,7 @@ describe("operations", () => {
 
     it("can modify nested update action to be a delete", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -818,6 +835,7 @@ describe("operations", () => {
 
     it("can modify nested update action to be a deleteMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -861,6 +879,7 @@ describe("operations", () => {
   describe("upsert", () => {
     it("can modify nested upsert action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -903,6 +922,7 @@ describe("operations", () => {
 
     it("can modify nested upsert action array to be a create array", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -948,6 +968,7 @@ describe("operations", () => {
 
     it("can modify nested upsert action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -995,6 +1016,7 @@ describe("operations", () => {
 
     it("can modify nested upsert action to be a update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1046,6 +1068,7 @@ describe("operations", () => {
 
     it("can modify nested upsert action to be a updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1097,6 +1120,7 @@ describe("operations", () => {
 
     it("can modify nested upsert action to be a connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1150,6 +1174,7 @@ describe("operations", () => {
   describe("createMany", () => {
     it("can modify nested createMany action to be a create list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1186,6 +1211,7 @@ describe("operations", () => {
 
     it("can modify nested createMany action to be an update list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1234,6 +1260,7 @@ describe("operations", () => {
 
     it("can modify nested createMany action to be an upsert list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1284,6 +1311,7 @@ describe("operations", () => {
 
     it("can modify nested createMany action to be an connect list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1330,6 +1358,7 @@ describe("operations", () => {
 
     it("can modify nested createMany action to be a connectOrCreate list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1382,6 +1411,7 @@ describe("operations", () => {
   describe("delete", () => {
     it("can modify nested delete action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1424,6 +1454,7 @@ describe("operations", () => {
 
     it("can modify nested delete action list to be an update list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1468,6 +1499,7 @@ describe("operations", () => {
 
     it("can modify nested boolean delete action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1505,6 +1537,7 @@ describe("operations", () => {
 
     it("can modify deeply nested delete action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1555,6 +1588,7 @@ describe("operations", () => {
 
     it("can modify deeply nested delete action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1605,6 +1639,7 @@ describe("operations", () => {
 
     it("can modify deeply nested delete action list to be a deleteMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1648,6 +1683,7 @@ describe("operations", () => {
   describe("deleteMany", () => {
     it("can modify nested deleteMany action to be a delete", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1686,6 +1722,7 @@ describe("operations", () => {
 
     it("can modify nested deleteMany action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1729,6 +1766,7 @@ describe("operations", () => {
 
     it("can modify nested deleteMany action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1774,6 +1812,7 @@ describe("operations", () => {
   describe("connect", () => {
     it("can modify nested connect action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1810,6 +1849,7 @@ describe("operations", () => {
 
     it("can modify nested connect action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1853,6 +1893,7 @@ describe("operations", () => {
 
     it("can modify nested connect action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1898,6 +1939,7 @@ describe("operations", () => {
 
     it("can modify nested connect action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1943,6 +1985,7 @@ describe("operations", () => {
 
     it("can modify nested connect action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1990,6 +2033,7 @@ describe("operations", () => {
 
     it("can modify nested connect action to be an connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2037,6 +2081,7 @@ describe("operations", () => {
   describe("connectOrCreate", () => {
     it("can modify nested connectOrCreate action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2077,6 +2122,7 @@ describe("operations", () => {
 
     it("can modify nested connectOrCreate action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2124,6 +2170,7 @@ describe("operations", () => {
 
     it("can modify nested connectOrCreate action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2173,6 +2220,7 @@ describe("operations", () => {
 
     it("can modify nested connectOrCreate action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2222,6 +2270,7 @@ describe("operations", () => {
 
     it("can modify nested connectOrCreate action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2273,6 +2322,7 @@ describe("operations", () => {
 
     it("can modify nested connectOrCreate action to be an connect", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2315,6 +2365,7 @@ describe("operations", () => {
   describe("include", () => {
     it("can modify nested include action to be a select", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2349,6 +2400,7 @@ describe("operations", () => {
   describe("select", () => {
     it("can modify nested select action to be an include", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2381,6 +2433,7 @@ describe("operations", () => {
   describe("merging", () => {
     it("merges converted write action args with existing write action args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2438,6 +2491,7 @@ describe("operations", () => {
 
     it("merges converted write array args with existing write action args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2497,6 +2551,7 @@ describe("operations", () => {
 
     it("merges converted write args with existing write action array args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2552,6 +2607,7 @@ describe("operations", () => {
 
     it("merges converted write array args with existing write action array args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2613,6 +2669,7 @@ describe("operations", () => {
 
     it("merges converted write args with existing write action args when nested in action array", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2675,6 +2732,7 @@ describe("operations", () => {
 
     it("merges operations converted to createMany with existing createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2751,6 +2809,7 @@ describe("operations", () => {
 
     it("merges operations converted to upsert action on toOne relation with existing upsert action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2812,6 +2871,7 @@ describe("operations", () => {
 
     it("merges operations converted to create action on toOne relation with existing create action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2858,6 +2918,7 @@ describe("operations", () => {
 
     it("merges operations converted to update action on toOne relation with existing update action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2905,6 +2966,7 @@ describe("operations", () => {
 
     it("merges connect action on toOne relation with existing connect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2944,6 +3006,7 @@ describe("operations", () => {
 
     it("merges connectOrCreate action on toOne relation with existing connectOrCreate action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2997,6 +3060,7 @@ describe("operations", () => {
 
     it("merges disconnect where action with existing disconnect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3048,6 +3112,7 @@ describe("operations", () => {
 
     it("replaces existing disconnect true action with new disconnect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3080,6 +3145,7 @@ describe("operations", () => {
 
     it("replaces existing disconnect false action with new disconnect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3112,6 +3178,7 @@ describe("operations", () => {
 
     it("replaces existing delete true action with new delete action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3144,6 +3211,7 @@ describe("operations", () => {
 
     it("replaces existing delete false action with new delete action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3176,6 +3244,7 @@ describe("operations", () => {
 
     it("replaces existing include with select changed to include", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },

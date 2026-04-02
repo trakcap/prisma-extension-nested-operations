@@ -2,9 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dmmf {
+  provider = "node prisma/dmmf-generate.js"
+  output   = "../test/dmmf.ts"
+}
+
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {

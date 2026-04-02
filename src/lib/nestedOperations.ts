@@ -1,7 +1,6 @@
-import type { Prisma } from "@prisma/client";
-import type { Types } from "@prisma/client/runtime/library";
+import type { Types } from "@prisma/client/runtime/client";
 
-import type { NestedParams, OperationCall } from "./types";
+import type { DMMF, NestedParams, OperationCall } from "./types";
 import { executeOperation } from "./utils/execution";
 import { extractNestedOperations } from "./utils/extractNestedOperations";
 import { buildArgsFromCalls } from "./utils/params";
@@ -15,6 +14,17 @@ import { buildTargetRelationPath } from "./utils/targets";
 
 type NonNullable<T> = Exclude<T, null | undefined>;
 
+type RootOperationCb<TypeMap extends Types.Extensions.TypeMapDef> = NonNullable<
+  Types.Extensions.DynamicQueryExtensionArgs<
+    { $allModels: { $allOperations: any } },
+    TypeMap
+  >["$allModels"]["$allOperations"]
+>;
+
+type RootOperation<TypeMap extends Types.Extensions.TypeMapDef> = (
+  args: Parameters<RootOperationCb<TypeMap>>[0],
+) => ReturnType<RootOperationCb<TypeMap>>;
+
 function isFulfilled(result: PromiseSettledResult<any>): result is PromiseFulfilledResult<any> {
   return result.status === "fulfilled";
 }
@@ -23,24 +33,24 @@ function isRejected(result: PromiseSettledResult<any>): result is PromiseRejecte
   return result.status === "rejected";
 }
 
-export function withNestedOperations<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs>({
+export function withNestedOperations<
+  TypeMap extends Types.Extensions.TypeMapDef = Types.Extensions.TypeMapDef,
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
+>({
   $rootOperation,
   $allNestedOperations,
+  dmmf,
 }: {
-  $rootOperation: NonNullable<
-    Types.Extensions.DynamicQueryExtensionArgs<
-      { $allModels: { $allOperations: any } },
-      Prisma.TypeMap<ExtArgs>
-    >["$allModels"]["$allOperations"]
-  >;
+  $rootOperation: RootOperation<TypeMap>;
   $allNestedOperations: (params: NestedParams<ExtArgs>) => Promise<any>;
+  dmmf: DMMF;
 }): typeof $rootOperation {
-  return async (rootParams) => {
+  return (async (rootParams: Parameters<RootOperation<TypeMap>>[0]) => {
     let calls: OperationCall<ExtArgs>[] = [];
 
     try {
       const executionResults = await Promise.allSettled(
-        extractNestedOperations(rootParams as NestedParams<ExtArgs>).map((nestedOperation) =>
+        extractNestedOperations(dmmf, rootParams as NestedParams<ExtArgs>).map((nestedOperation) =>
           executeOperation($allNestedOperations, nestedOperation.params, nestedOperation.target),
         ),
       );
@@ -67,7 +77,7 @@ export function withNestedOperations<ExtArgs extends Types.Extensions.InternalAr
           call.queryPromise.resolve(undefined);
         });
         await Promise.all(calls.map((call) => call.result));
-        return null;
+        return result;
       }
 
       // add id symbols to result so we can use them to update result relations
@@ -136,5 +146,5 @@ export function withNestedOperations<ExtArgs extends Types.Extensions.InternalAr
       // bubble error up to parent middleware
       throw e;
     }
-  };
+  }) as RootOperation<TypeMap>;
 }

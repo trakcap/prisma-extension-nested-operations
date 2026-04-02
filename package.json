@@ -26,7 +26,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
-    "test:unit": "prisma generate && vitest run test/unit",
+    "test:unit": "prisma generate && biome format --fix test/dmmf.ts && vitest run test/unit",
     "test:e2e": "./test/scripts/run-with-postgres.sh vitest run test/e2e",
     "test": "./test/scripts/run-with-postgres.sh vitest run",
     "lint": "biome check",
@@ -39,14 +39,16 @@
     "es-toolkit": "^1.45.1"
   },
   "peerDependencies": {
-    "@prisma/client": "*"
+    "@prisma/client": ">=7"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
     "@faker-js/faker": "^10.4.0",
-    "@prisma/client": "^5.0.0",
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
+    "@prisma/generator-helper": "^7.6.0",
     "@types/node": "^24.12.0",
-    "prisma": "^5.0.0",
+    "prisma": "^7.6.0",
     "typescript": "^6.0.2",
     "vitest": "^4.1.2"
   }

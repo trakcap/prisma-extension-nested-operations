@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 
@@ -18,6 +19,7 @@ function addReturnedDate(result: any) {
 describe("modifying results", () => {
   it("returns null successfully", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -37,6 +39,7 @@ describe("modifying results", () => {
 
   it("returns count successfully", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -54,6 +57,7 @@ describe("modifying results", () => {
 
   it("returns correct result by default", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -83,6 +87,7 @@ describe("modifying results", () => {
 
   it("returns correct result when relations are included", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -154,6 +159,7 @@ describe("modifying results", () => {
 
   it("returns correct result when relations are selected", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -228,6 +234,7 @@ describe("modifying results", () => {
 
   it("returns correct result when relations are included and selected", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -311,6 +318,7 @@ describe("modifying results", () => {
 
   it("supports modifying root result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: async (params) => {
         const result = await params.query(params.args);
         return addReturnedDate(result);
@@ -344,6 +352,7 @@ describe("modifying results", () => {
       $allNestedOperations: (params) => {
         return params.query(params.args);
       },
+      dmmf,
       $rootOperation: async (params) => {
         const result = await params.query(params.args);
         await wait(100);
@@ -372,6 +381,7 @@ describe("modifying results", () => {
 
   it("supports modifying included results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -425,6 +435,7 @@ describe("modifying results", () => {
 
   it("supports modifying included results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -479,6 +490,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -532,6 +544,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -586,6 +599,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple included relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -655,6 +669,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple included relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -725,6 +740,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple selected relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -794,6 +810,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple selected relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -864,6 +881,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -959,6 +977,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1055,6 +1074,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1150,6 +1170,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1246,6 +1267,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results through multiple relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1390,6 +1412,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results through multiple relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1535,6 +1558,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results through multiple relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1679,6 +1703,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results through multiple relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1824,6 +1849,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results in nested include", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1893,6 +1919,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results in nested include asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1962,6 +1989,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results in nested select", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2047,6 +2075,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results in nested select asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2133,6 +2162,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2172,6 +2202,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations in list results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2241,6 +2272,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations nested in toOne result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2295,6 +2327,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations nested in toMany results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2362,6 +2395,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne result with nested results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2410,6 +2444,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2447,6 +2482,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results in list results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2494,6 +2530,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results in nested toOne result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2544,6 +2581,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results in nested toMany result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2613,6 +2651,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results with nested results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2677,6 +2716,7 @@ describe("modifying results", () => {
 
   it("waits for all middleware to finish modifying result before resolving", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: async (params) => {
         const result = await params.query(params.args);
         await wait(300);

@@ -3,14 +3,15 @@ import { Prisma } from "@prisma/client";
 import { set } from "es-toolkit/compat";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 
 describe("args", () => {
   it("does not mutate passed params object", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
-        // @ts-expect-error - testing for mutation
         params.args.test = "test";
         return params.query(params.args);
       },
@@ -37,6 +38,7 @@ describe("args", () => {
 
   it("passes through instances of Prisma.NullTypes to query", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -70,6 +72,7 @@ describe("args", () => {
 
   it("can modify root args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         if (params.operation === "create" && params.model === "User") {
           return params.query({
@@ -100,7 +103,8 @@ describe("args", () => {
   });
 
   it("can modify root args asynchronously", async () => {
-    const allOperations = withNestedOperations({
+    const allOperations = withNestedOperations<Prisma.TypeMap>({
+      dmmf,
       async $rootOperation(params) {
         if (params.operation === "create" && params.model === "User") {
           await wait(100);
@@ -133,6 +137,7 @@ describe("args", () => {
 
   it("can modify nested args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -174,6 +179,7 @@ describe("args", () => {
 
   it("can modify nested args asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -216,6 +222,7 @@ describe("args", () => {
 
   it("can modify nested create list args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -257,6 +264,7 @@ describe("args", () => {
 
   it("can modify deeply nested toOne update args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -340,6 +348,7 @@ describe("args", () => {
 
   it("can modify nested update list args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -400,6 +409,7 @@ describe("args", () => {
 
   it("can modify nested delete list args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -436,6 +446,7 @@ describe("args", () => {
 
   it("can modify args of operations nested in list", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -527,6 +538,7 @@ describe("args", () => {
 
   it("can modify args of deeply nested lists of create operations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -642,6 +654,7 @@ describe("args", () => {
 
   it("can modify include args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         if (params.operation === "create" && params.model === "User") {
           return params.query({
@@ -687,6 +700,7 @@ describe("args", () => {
 
   it("can modify include args through include actions", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -732,6 +746,7 @@ describe("args", () => {
 
   it("can modify deeply nested include args through include action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -788,6 +803,7 @@ describe("args", () => {
 
   it("can modify select args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         if (params.operation === "create" && params.model === "User") {
           return params.query({
@@ -833,6 +849,7 @@ describe("args", () => {
 
   it("can modify select args through select action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -897,6 +914,7 @@ describe("args", () => {
 
   it("can modify deeply nested select args through select action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -955,6 +973,7 @@ describe("args", () => {
 
   it("can add data to nested createMany args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1010,6 +1029,7 @@ describe("args", () => {
 
   it("allows user to reorder nested createMany args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1052,6 +1072,7 @@ describe("args", () => {
 
   it("allows user to add data to nested createMany args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1107,6 +1128,7 @@ describe("args", () => {
 
   it("allows user to remove data from nested createMany args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1159,6 +1181,7 @@ describe("args", () => {
 
   it("allows user to modify nested where args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1195,6 +1218,7 @@ describe("args", () => {
 
   it("allows user to modify nested where args by removing a field", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1239,6 +1263,7 @@ describe("args", () => {
 
   it("allows user to modify nested where args with nested where", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1281,6 +1306,7 @@ describe("args", () => {
 
   it("allows user to modify nested where args with nested where in logical operation", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1332,6 +1358,7 @@ describe("args", () => {
 
   it("allows user to modify where args deeply nested in logical operations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1402,6 +1429,7 @@ describe("args", () => {
 
   it("allows user to modify nested include where args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1435,6 +1463,7 @@ describe("args", () => {
 
   it("allows user to modify nested select where args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1468,6 +1497,7 @@ describe("args", () => {
 
   it("allows user to modify nested where relation args in nested include where", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1522,6 +1552,7 @@ describe("args", () => {
 
   it("allows user to modify nested where relation args in nested select where", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1576,6 +1607,7 @@ describe("args", () => {
 
   it("ignores invalid values passed to where logical operations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1636,6 +1668,7 @@ describe("args", () => {
 
   it("waits for all middleware to finish before calling query when modifying args", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },

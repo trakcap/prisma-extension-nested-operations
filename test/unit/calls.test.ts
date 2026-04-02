@@ -1,11 +1,12 @@
 import { faker } from "@faker-js/faker";
 import type { Prisma } from "@prisma/client";
-import type { Types } from "@prisma/client/runtime/library";
+import type { Types } from "@prisma/client/runtime/client";
 import { get } from "es-toolkit/compat";
 
 import { type NestedParams, withNestedOperations } from "../../src";
-import type { LogicalOperator, Modifier } from "../../src/lib/types";
-import { relationsByModel } from "../../src/lib/utils/relations";
+import type { DMMFField, LogicalOperator, Modifier } from "../../src/lib/types";
+import { getRelationsByModel } from "../../src/lib/utils/relations";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 
 type OperationCall<Model extends Prisma.ModelName> = {
@@ -29,8 +30,8 @@ type OperationCall<Model extends Prisma.ModelName> = {
   argsPath: string;
   scope?: OperationCall<any>;
   relations: {
-    to: Prisma.DMMF.Field;
-    from: Prisma.DMMF.Field;
+    to: DMMFField;
+    from: DMMFField;
   };
   modifier?: Modifier;
   logicalOperators?: LogicalOperator[];
@@ -52,8 +53,8 @@ function nestedParamsFromCall<
   };
 }
 
-function getModelRelation<Model extends Prisma.ModelName>(model: Model, relationName: string): Prisma.DMMF.Field {
-  const modelRelation = relationsByModel[model]?.find((relation) => relation.name === relationName);
+function getModelRelation<Model extends Prisma.ModelName>(model: Model, relationName: string): DMMFField {
+  const modelRelation = getRelationsByModel(dmmf)[model]?.find((relation) => relation.name === relationName);
   if (!modelRelation) {
     throw new Error(`Unable to find relation ${relationName} on model ${model}`);
   }
@@ -67,6 +68,7 @@ describe("calls", () => {
     const $rootOperation = vi.fn((params) => params.query(params.args));
     const $allNestedOperations = vi.fn((params) => params.query(params.args));
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation,
       $allNestedOperations,
     });
@@ -4084,6 +4086,7 @@ describe("calls", () => {
     const allOperations = withNestedOperations({
       $rootOperation,
       $allNestedOperations,
+      dmmf,
     });
 
     await allOperations(rootParams as any);

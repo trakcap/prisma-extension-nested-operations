@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { type Post, Prisma, type User } from "@prisma/client";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import client from "./client";
 
 describe("smoke", () => {
@@ -77,6 +78,7 @@ describe("smoke", () => {
               $allNestedOperations: ({ args, query }) => {
                 return query(args);
               },
+              dmmf,
             }),
           },
         },
@@ -176,6 +178,7 @@ describe("smoke", () => {
               $allNestedOperations: ({ args, query }) => {
                 return query(args);
               },
+              dmmf,
             }),
           },
         },
@@ -217,6 +220,7 @@ describe("smoke", () => {
                 }
                 return query(args);
               },
+              dmmf,
             }),
           },
         },

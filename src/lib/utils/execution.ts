@@ -1,5 +1,5 @@
 import { DeferredPromise } from "@open-draft/deferred-promise";
-import type { Types } from "@prisma/client/runtime/library";
+import type { Types } from "@prisma/client/runtime/client";
 import { omit } from "es-toolkit/compat";
 
 import type { ExecuteFunction, NestedParams, OperationCall, Target } from "../types";
