@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["es2023"],
-    "rootDir": ".",
+    "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist",
@@ -15,5 +15,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2023"
-  }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

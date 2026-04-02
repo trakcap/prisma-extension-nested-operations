@@ -901,6 +901,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@trakcap/prisma-extension-nested-operations@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@trakcap/prisma-extension-nested-operations@workspace:."
+  dependencies:
+    "@biomejs/biome": "npm:^2.4.10"
+    "@open-draft/deferred-promise": "npm:^2.1.0"
+    "@prisma/client": "npm:^5.0.0"
+    "@types/faker": "npm:^5.5.9"
+    "@types/jest": "npm:^29.2.5"
+    "@types/lodash": "npm:^4.14.185"
+    dotenv: "npm:^16.0.3"
+    faker: "npm:^5.0.0"
+    jest: "npm:^29.3.1"
+    lodash: "npm:^4.17.21"
+    prisma: "npm:^5.0.0"
+    ts-jest: "npm:^29.0.3"
+    ts-node: "npm:^9.1.1"
+    typescript: "npm:^5.9.3"
+  peerDependencies:
+    "@prisma/client": "*"
+  languageName: unknown
+  linkType: soft
+
 "@types/babel__core@npm:^7.1.14":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
@@ -2976,29 +2999,6 @@ __metadata:
   checksum: 10c0/edc5ff89f51916f036c62ed433506b55446ff739358de77207e63e88a28ca2894caac6e73dcb68166a606e51c8087d32d400473e6a9fdd2dbe743f46c9c0276f
   languageName: node
   linkType: hard
-
-"prisma-extension-nested-operations@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "prisma-extension-nested-operations@workspace:."
-  dependencies:
-    "@biomejs/biome": "npm:^2.4.10"
-    "@open-draft/deferred-promise": "npm:^2.1.0"
-    "@prisma/client": "npm:^5.0.0"
-    "@types/faker": "npm:^5.5.9"
-    "@types/jest": "npm:^29.2.5"
-    "@types/lodash": "npm:^4.14.185"
-    dotenv: "npm:^16.0.3"
-    faker: "npm:^5.0.0"
-    jest: "npm:^29.3.1"
-    lodash: "npm:^4.17.21"
-    prisma: "npm:^5.0.0"
-    ts-jest: "npm:^29.0.3"
-    ts-node: "npm:^9.1.1"
-    typescript: "npm:^5.9.3"
-  peerDependencies:
-    "@prisma/client": "*"
-  languageName: unknown
-  linkType: soft
 
 "prisma@npm:^5.0.0":
   version: 5.22.0

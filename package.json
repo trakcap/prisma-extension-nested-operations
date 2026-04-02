@@ -1,10 +1,28 @@
 {
-  "name": "prisma-extension-nested-operations",
-  "version": "1.0.0-semantically-released",
+  "name": "@trakcap/prisma-extension-nested-operations",
+  "version": "1.0.0",
   "description": "Utils for creating Prisma client extensions with nested operations",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/esm/index.js",
+  "author": "Olivier Wilkinson",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trakcap/prisma-extension-nested-operations.git"
+  },
+  "engines": {
+    "node": "~24.13.0"
+  },
+  "packageManager": "yarn@4.13.0",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
@@ -16,17 +34,6 @@
     "lint:ci": "biome ci --reporter=github",
     "typecheck": "tsc --noEmit"
   },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "prisma",
-    "client",
-    "extensions",
-    "extension"
-  ],
-  "author": "Olivier Wilkinson",
-  "license": "Apache-2.0",
   "dependencies": {
     "@open-draft/deferred-promise": "^2.1.0",
     "lodash": "^4.17.21"
@@ -47,18 +54,5 @@
     "ts-jest": "^29.0.3",
     "ts-node": "^9.1.1",
     "typescript": "^5.9.3"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/olivierwilkinson/prisma-extension-nested-operations.git"
-  },
-  "release": {
-    "branches": [
-      "main",
-      "next"
-    ]
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
