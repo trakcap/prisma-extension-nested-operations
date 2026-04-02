@@ -10,7 +10,7 @@ on:
       - '*'
 
 jobs:
-  lint:
+  typecheck:
     runs-on: ubuntu-latest
 
     steps:

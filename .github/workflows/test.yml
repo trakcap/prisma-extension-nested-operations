@@ -10,7 +10,7 @@ on:
       - '*'
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -44,3 +44,4 @@ jobs:
 
       - name: Test
         run: yarn test:ci
+        working-directory: test
