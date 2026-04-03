@@ -27,6 +27,12 @@ jobs:
         run: yarn build
 
       - name: Publish to registry
-        run: npm publish
+        run: |
+          TAG=$(jq -r '.version | if contains("-") then split("-")[1] | split(".")[0] else "" end' package.json)
+          if [ -n "$TAG" ]; then
+            yarn npm publish --tag "$TAG"
+          else
+            yarn npm publish
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

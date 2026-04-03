@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/trakcap/prisma-extension-nested-operations.git"
+    "url": "git+https://github.com/trakcap/prisma-extension-nested-operations.git"
   },
   "engines": {
     "node": "~24.13.0"
