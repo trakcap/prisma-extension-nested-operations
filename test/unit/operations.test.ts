@@ -1,13 +1,15 @@
-import faker from "faker";
-import { get, set } from "lodash";
+import { faker } from "@faker-js/faker";
+import { get, set } from "es-toolkit/compat";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 
 describe("operations", () => {
   it("applies query to operations moved to new action type", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -19,7 +21,7 @@ describe("operations", () => {
               create: params.args.data,
               update: params.args.data,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -28,7 +30,7 @@ describe("operations", () => {
             ...params.args,
             update: {
               ...params.args.update,
-              number: faker.datatype.number(),
+              number: faker.number.float(),
             },
           });
         }
@@ -37,19 +39,19 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
           upsert: {
-            where: { id: faker.datatype.number() },
+            where: { id: faker.number.float() },
             create: { title: faker.lorem.sentence() },
             update: { title: faker.lorem.sentence() },
           },
           update: {
-            where: { id: faker.datatype.number() },
+            where: { id: faker.number.float() },
             data: { title: faker.lorem.sentence() },
           },
         },
@@ -79,12 +81,13 @@ describe("operations", () => {
             },
           },
         ],
-      })
+      }),
     );
   });
 
   it("merges operation converted to existing operation correctly when converted operation defined before target operation", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -96,7 +99,7 @@ describe("operations", () => {
               create: params.args.data,
               update: params.args.data,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -104,18 +107,18 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
           update: {
-            where: { id: faker.datatype.number() },
+            where: { id: faker.number.float() },
             data: { title: faker.lorem.sentence() },
           },
           upsert: {
-            where: { id: faker.datatype.number() },
+            where: { id: faker.number.float() },
             create: { title: faker.lorem.sentence() },
             update: { title: faker.lorem.sentence() },
           },
@@ -139,12 +142,13 @@ describe("operations", () => {
             update: params.args.data.posts.update.data,
           },
         ],
-      })
+      }),
     );
   });
 
   it("replaces existing boolean action with new action when existing is defined before source action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -157,9 +161,9 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         profile: {
@@ -173,12 +177,13 @@ describe("operations", () => {
     expect(query).toHaveBeenCalledWith(
       set(params.args, "data.profile", {
         disconnect: true,
-      })
+      }),
     );
   });
 
   it("waits for all queries to finish before calling root query when modifying nested action", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -191,7 +196,7 @@ describe("operations", () => {
               create: params.args,
               update: params.args,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -203,7 +208,7 @@ describe("operations", () => {
               create: params.args.data,
               update: params.args.data,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -211,19 +216,19 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "create", {
       data: {
         email: faker.internet.email(),
         posts: {
           create: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
             comments: {
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
-                authorId: faker.datatype.number(),
+                authorId: faker.number.float(),
               },
             },
           },
@@ -261,12 +266,13 @@ describe("operations", () => {
             },
           },
         },
-      })
+      }),
     );
   });
 
   it("can modify deeply nested operations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -279,7 +285,7 @@ describe("operations", () => {
                 create: params.args,
                 update: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -289,7 +295,7 @@ describe("operations", () => {
               create: params.args,
               update: params.args,
             },
-            "upsert"
+            "upsert",
           );
         }
 
@@ -297,19 +303,19 @@ describe("operations", () => {
       },
     });
 
-    const query = jest.fn((_: any) => Promise.resolve(null));
+    const query = vi.fn((_: any) => Promise.resolve(null));
     const params = createParams(query, "User", "update", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       data: {
         email: faker.internet.email(),
         posts: {
           create: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
             comments: {
               create: {
-                id: faker.datatype.number(),
-                authorId: faker.datatype.number(),
+                id: faker.number.float(),
+                authorId: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             },
@@ -338,13 +344,14 @@ describe("operations", () => {
           create: createPostData,
           update: createPostData,
         },
-      })
+      }),
     );
   });
 
   describe("create", () => {
     it("can modify nested create action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -355,7 +362,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: params.args,
               },
-              "update"
+              "update",
             );
           }
 
@@ -363,14 +370,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             create: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               title: faker.lorem.sentence(),
             },
           },
@@ -385,12 +392,13 @@ describe("operations", () => {
             where: { id: params.args.data.posts.create.id },
             data: params.args.data.posts.create,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested create action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -402,7 +410,7 @@ describe("operations", () => {
                 create: params.args,
                 update: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -410,9 +418,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -432,12 +440,13 @@ describe("operations", () => {
             create: createData,
             update: createData,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested create action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -450,9 +459,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -466,12 +475,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: { data: [params.args.data.posts.create] },
-        })
+        }),
       );
     });
 
     it("can modify nested create action array to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -481,7 +491,7 @@ describe("operations", () => {
               {
                 data: [params.args],
               },
-              "createMany"
+              "createMany",
             );
           }
 
@@ -489,16 +499,13 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            create: [
-              { title: faker.lorem.sentence() },
-              { title: faker.lorem.sentence() },
-            ],
+            create: [{ title: faker.lorem.sentence() }, { title: faker.lorem.sentence() }],
           },
         },
       });
@@ -508,12 +515,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: { data: params.args.data.posts.create },
-        })
+        }),
       );
     });
 
     it("can modify nested create action to be a connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -524,7 +532,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 create: params.args,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -532,14 +540,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             create: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               title: faker.lorem.sentence(),
             },
           },
@@ -554,7 +562,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.create.id },
             create: params.args.data.posts.create,
           },
-        })
+        }),
       );
     });
   });
@@ -562,6 +570,7 @@ describe("operations", () => {
   describe("update", () => {
     it("can modify nested update action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -574,14 +583,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: { title: faker.lorem.sentence() },
             },
           },
@@ -593,12 +602,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.update.data,
-        })
+        }),
       );
     });
 
     it("can modify nested update action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -611,14 +621,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: { title: faker.lorem.sentence() },
             },
           },
@@ -630,12 +640,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: { data: [params.args.data.posts.update.data] },
-        })
+        }),
       );
     });
 
     it("can modify nested update action to be a connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -646,7 +657,7 @@ describe("operations", () => {
                 where: { id: params.args.where.id },
                 create: params.args.data,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -654,14 +665,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
               },
@@ -678,12 +689,13 @@ describe("operations", () => {
             where: params.args.data.posts.update.where,
             create: params.args.data.posts.update.data,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested update action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -696,14 +708,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
               },
@@ -717,12 +729,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           updateMany: params.args.data.posts.update,
-        })
+        }),
       );
     });
 
     it("can modify nested update action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -734,7 +747,7 @@ describe("operations", () => {
                 create: params.args.data,
                 update: params.args.data,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -742,14 +755,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
               },
@@ -769,12 +782,13 @@ describe("operations", () => {
             create: updateData,
             update: updateData,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested update action to be a delete", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -784,7 +798,7 @@ describe("operations", () => {
               {
                 where: { id: params.args.where.id },
               },
-              "delete"
+              "delete",
             );
           }
 
@@ -792,14 +806,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
               },
@@ -815,35 +829,33 @@ describe("operations", () => {
           delete: {
             where: params.args.data.posts.update.where,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested update action to be a deleteMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
         $allNestedOperations: (params) => {
           if (params.operation === "update" && params.model === "Post") {
-            return params.query(
-              { where: { id: params.args.where.id } },
-              "deleteMany"
-            );
+            return params.query({ where: { id: params.args.where.id } }, "deleteMany");
           }
 
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
               },
@@ -859,7 +871,7 @@ describe("operations", () => {
           deleteMany: {
             where: params.args.data.posts.update.where,
           },
-        })
+        }),
       );
     });
   });
@@ -867,6 +879,7 @@ describe("operations", () => {
   describe("upsert", () => {
     it("can modify nested upsert action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -879,14 +892,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
                 title: faker.lorem.sentence(),
               },
@@ -903,12 +916,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.upsert.create,
-        })
+        }),
       );
     });
 
     it("can modify nested upsert action array to be a create array", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -921,20 +935,20 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
@@ -948,12 +962,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.upsert.map((u: any) => u.create),
-        })
+        }),
       );
     });
 
     it("can modify nested upsert action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -966,20 +981,20 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
@@ -993,16 +1008,15 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           createMany: {
-            data: params.args.data.posts.upsert.map(
-              ({ create }: any) => create
-            ),
+            data: params.args.data.posts.upsert.map(({ create }: any) => create),
           },
-        })
+        }),
       );
     });
 
     it("can modify nested upsert action to be a update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1013,7 +1027,7 @@ describe("operations", () => {
                 where: { id: params.args.where.id },
                 data: params.args.update,
               },
-              "update"
+              "update",
             );
           }
 
@@ -1021,20 +1035,20 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
@@ -1047,15 +1061,14 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          update: params.args.data.posts.upsert.map(
-            ({ where, update }: any) => ({ where, data: update })
-          ),
-        })
+          update: params.args.data.posts.upsert.map(({ where, update }: any) => ({ where, data: update })),
+        }),
       );
     });
 
     it("can modify nested upsert action to be a updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1066,7 +1079,7 @@ describe("operations", () => {
                 where: params.args.where,
                 data: params.args.update,
               },
-              "updateMany"
+              "updateMany",
             );
           }
 
@@ -1074,20 +1087,20 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
@@ -1100,15 +1113,14 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          updateMany: params.args.data.posts.upsert.map(
-            ({ where, update }: any) => ({ where, data: update })
-          ),
-        })
+          updateMany: params.args.data.posts.upsert.map(({ where, update }: any) => ({ where, data: update })),
+        }),
       );
     });
 
     it("can modify nested upsert action to be a connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1119,7 +1131,7 @@ describe("operations", () => {
                 where: params.args.where,
                 create: params.args.create,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -1127,20 +1139,20 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: faker.lorem.sentence() },
                 update: { title: faker.lorem.sentence() },
               },
@@ -1153,10 +1165,8 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          connectOrCreate: params.args.data.posts.upsert.map(
-            ({ where, create }: any) => ({ where, create })
-          ),
-        })
+          connectOrCreate: params.args.data.posts.upsert.map(({ where, create }: any) => ({ where, create })),
+        }),
       );
     });
   });
@@ -1164,6 +1174,7 @@ describe("operations", () => {
   describe("createMany", () => {
     it("can modify nested createMany action to be a create list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1176,17 +1187,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             createMany: {
-              data: [
-                { title: faker.lorem.sentence() },
-                { title: faker.lorem.sentence() },
-              ],
+              data: [{ title: faker.lorem.sentence() }, { title: faker.lorem.sentence() }],
             },
           },
         },
@@ -1197,12 +1205,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.createMany.data,
-        })
+        }),
       );
     });
 
     it("can modify nested createMany action to be an update list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1213,7 +1222,7 @@ describe("operations", () => {
                 where: { id: data.id },
                 data,
               })),
-              "update"
+              "update",
             );
           }
 
@@ -1221,9 +1230,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -1245,12 +1254,13 @@ describe("operations", () => {
             where: { id: data.id },
             data,
           })),
-        })
+        }),
       );
     });
 
     it("can modify nested createMany action to be an upsert list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1262,7 +1272,7 @@ describe("operations", () => {
                 create: data,
                 update: data,
               })),
-              "upsert"
+              "upsert",
             );
           }
 
@@ -1270,9 +1280,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -1295,12 +1305,13 @@ describe("operations", () => {
             create: data,
             update: data,
           })),
-        })
+        }),
       );
     });
 
     it("can modify nested createMany action to be an connect list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1310,7 +1321,7 @@ describe("operations", () => {
               params.args.data.map((data: any) => ({
                 id: data.id,
               })),
-              "connect"
+              "connect",
             );
           }
 
@@ -1318,9 +1329,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -1341,12 +1352,13 @@ describe("operations", () => {
           connect: params.args.data.posts.createMany.data.map((data: any) => ({
             id: data.id,
           })),
-        })
+        }),
       );
     });
 
     it("can modify nested createMany action to be a connectOrCreate list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1357,7 +1369,7 @@ describe("operations", () => {
                 where: { id: data.id },
                 create: data,
               })),
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
 
@@ -1365,9 +1377,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -1385,13 +1397,11 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
-          connectOrCreate: params.args.data.posts.createMany.data.map(
-            (data: any) => ({
-              where: { id: data.id },
-              create: data,
-            })
-          ),
-        })
+          connectOrCreate: params.args.data.posts.createMany.data.map((data: any) => ({
+            where: { id: data.id },
+            create: data,
+          })),
+        }),
       );
     });
   });
@@ -1401,6 +1411,7 @@ describe("operations", () => {
   describe("delete", () => {
     it("can modify nested delete action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1411,7 +1422,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1419,13 +1430,13 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            delete: { id: faker.datatype.number() },
+            delete: { id: faker.number.float() },
           },
         },
       });
@@ -1437,12 +1448,13 @@ describe("operations", () => {
             where: { id: params.args.data.posts.delete.id },
             data: { deleted: true },
           },
-        })
+        }),
       );
     });
 
     it("can modify nested delete action list to be an update list", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1453,7 +1465,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1461,18 +1473,15 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
         },
         data: {
           email: faker.internet.email(),
           posts: {
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       });
@@ -1484,12 +1493,13 @@ describe("operations", () => {
             where: del,
             data: { deleted: true },
           })),
-        })
+        }),
       );
     });
 
     it("can modify nested boolean delete action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1500,7 +1510,7 @@ describe("operations", () => {
                 ...params.args,
                 deleted: true,
               },
-              "update"
+              "update",
             );
           }
 
@@ -1508,10 +1518,10 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
         },
         data: {
           email: faker.internet.email(),
@@ -1522,13 +1532,12 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { update: { deleted: true } })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { update: { deleted: true } }));
     });
 
     it("can modify deeply nested delete action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1539,7 +1548,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1547,18 +1556,18 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 comments: {
-                  delete: { id: faker.datatype.number() },
+                  delete: { id: faker.number.float() },
                 },
               },
             },
@@ -1573,12 +1582,13 @@ describe("operations", () => {
             where: params.args.data.posts.update.data.comments.delete,
             data: { deleted: true },
           },
-        })
+        }),
       );
     });
 
     it("can modify deeply nested delete action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1589,7 +1599,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "updateMany"
+              "updateMany",
             );
           }
 
@@ -1597,21 +1607,18 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 comments: {
-                  delete: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
                 },
               },
             },
@@ -1622,18 +1629,17 @@ describe("operations", () => {
 
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts.update.data.comments", {
-          updateMany: params.args.data.posts.update.data.comments.delete.map(
-            (del: any) => ({
-              where: del,
-              data: { deleted: true },
-            })
-          ),
-        })
+          updateMany: params.args.data.posts.update.data.comments.delete.map((del: any) => ({
+            where: del,
+            data: { deleted: true },
+          })),
+        }),
       );
     });
 
     it("can modify deeply nested delete action list to be a deleteMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1646,21 +1652,18 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 comments: {
-                  delete: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
                 },
               },
             },
@@ -1672,7 +1675,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts.update.data.comments", {
           deleteMany: params.args.data.posts.update.data.comments.delete,
-        })
+        }),
       );
     });
   });
@@ -1680,6 +1683,7 @@ describe("operations", () => {
   describe("deleteMany", () => {
     it("can modify nested deleteMany action to be a delete", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1692,15 +1696,15 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             delete: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
               },
             ],
           },
@@ -1712,12 +1716,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           delete: params.args.data.posts.delete,
-        })
+        }),
       );
     });
 
     it("can modify nested deleteMany action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1728,7 +1733,7 @@ describe("operations", () => {
                 where: params.args,
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -1736,16 +1741,13 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       });
@@ -1758,12 +1760,13 @@ describe("operations", () => {
             where: del,
             data: { deleted: true },
           })),
-        })
+        }),
       );
     });
 
     it("can modify nested deleteMany action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1774,7 +1777,7 @@ describe("operations", () => {
                 where: params.args,
                 data: { deleted: true },
               },
-              "updateMany"
+              "updateMany",
             );
           }
 
@@ -1782,16 +1785,13 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       });
@@ -1804,7 +1804,7 @@ describe("operations", () => {
             where: del,
             data: { deleted: true },
           })),
-        })
+        }),
       );
     });
   });
@@ -1812,6 +1812,7 @@ describe("operations", () => {
   describe("connect", () => {
     it("can modify nested connect action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1823,15 +1824,15 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -1842,12 +1843,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.connect,
-        })
+        }),
       );
     });
 
     it("can modify nested connect action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1857,22 +1859,22 @@ describe("operations", () => {
               {
                 data: [params.args],
               },
-              "createMany"
+              "createMany",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -1885,12 +1887,13 @@ describe("operations", () => {
           createMany: {
             data: [params.args.data.posts.connect],
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connect action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1901,22 +1904,22 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: params.args,
               },
-              "update"
+              "update",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -1930,12 +1933,13 @@ describe("operations", () => {
             where: { id: params.args.data.posts.connect.id },
             data: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connect action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1946,22 +1950,22 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: params.args,
               },
-              "updateMany"
+              "updateMany",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -1975,12 +1979,13 @@ describe("operations", () => {
             where: { id: params.args.data.posts.connect.id },
             data: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connect action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -1992,22 +1997,22 @@ describe("operations", () => {
                 update: params.args,
                 create: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -2022,12 +2027,13 @@ describe("operations", () => {
             create: params.args.data.posts.connect,
             update: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connect action to be an connectOrCreate", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2038,22 +2044,22 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 create: params.args,
               },
-              "connectOrCreate"
+              "connectOrCreate",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -2067,7 +2073,7 @@ describe("operations", () => {
             where: { id: params.args.data.posts.connect.id },
             create: params.args.data.posts.connect,
           },
-        })
+        }),
       );
     });
   });
@@ -2075,6 +2081,7 @@ describe("operations", () => {
   describe("connectOrCreate", () => {
     it("can modify nested connectOrCreate action to be a create", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2086,17 +2093,17 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 title: faker.lorem.sentence(),
               },
             },
@@ -2109,12 +2116,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           create: params.args.data.posts.connectOrCreate.create,
-        })
+        }),
       );
     });
 
     it("can modify nested connectOrCreate action to be a createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2124,24 +2132,24 @@ describe("operations", () => {
               {
                 data: [params.args.create],
               },
-              "createMany"
+              "createMany",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 title: faker.lorem.sentence(),
               },
             },
@@ -2156,12 +2164,13 @@ describe("operations", () => {
           createMany: {
             data: [params.args.data.posts.connectOrCreate.create],
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connectOrCreate action to be an update", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2172,24 +2181,24 @@ describe("operations", () => {
                 where: params.args.where,
                 data: params.args.create,
               },
-              "update"
+              "update",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 title: faker.lorem.sentence(),
               },
             },
@@ -2205,12 +2214,13 @@ describe("operations", () => {
             where: params.args.data.posts.connectOrCreate.where,
             data: params.args.data.posts.connectOrCreate.create,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connectOrCreate action to be an updateMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2221,24 +2231,24 @@ describe("operations", () => {
                 where: params.args.where,
                 data: params.args.create,
               },
-              "updateMany"
+              "updateMany",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 title: faker.lorem.sentence(),
               },
             },
@@ -2254,12 +2264,13 @@ describe("operations", () => {
             where: params.args.data.posts.connectOrCreate.where,
             data: params.args.data.posts.connectOrCreate.create,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connectOrCreate action to be an upsert", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2271,24 +2282,24 @@ describe("operations", () => {
                 create: params.args.create,
                 update: params.args.create,
               },
-              "upsert"
+              "upsert",
             );
           }
           return params.query(params.args);
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 title: faker.lorem.sentence(),
               },
             },
@@ -2305,12 +2316,13 @@ describe("operations", () => {
             create: params.args.data.posts.connectOrCreate.create,
             update: params.args.data.posts.connectOrCreate.create,
           },
-        })
+        }),
       );
     });
 
     it("can modify nested connectOrCreate action to be an connect", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2322,17 +2334,17 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
 
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 title: faker.lorem.sentence(),
               },
             },
@@ -2345,7 +2357,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.posts", {
           connect: params.args.data.posts.connectOrCreate.where,
-        })
+        }),
       );
     });
   });
@@ -2353,6 +2365,7 @@ describe("operations", () => {
   describe("include", () => {
     it("can modify nested include action to be a select", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2365,9 +2378,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: true,
         },
@@ -2387,6 +2400,7 @@ describe("operations", () => {
   describe("select", () => {
     it("can modify nested select action to be an include", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2399,9 +2413,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: {
             select: {
@@ -2412,15 +2426,14 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "include.posts", { include: { author: true } })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "include.posts", { include: { author: true } }));
     });
   });
 
   describe("merging", () => {
     it("merges converted write action args with existing write action args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2431,7 +2444,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2439,20 +2452,20 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
         },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: { title: faker.lorem.sentence() },
             },
             delete: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -2472,12 +2485,13 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
     it("merges converted write array args with existing write action args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2488,7 +2502,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2496,22 +2510,19 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
         },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: { title: faker.lorem.sentence() },
             },
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       });
@@ -2534,12 +2545,13 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
     it("merges converted write args with existing write action array args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2550,7 +2562,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2558,19 +2570,19 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: { title: faker.lorem.sentence() },
               },
             ],
-            delete: { id: faker.datatype.number() },
+            delete: { id: faker.number.float() },
           },
         },
       });
@@ -2589,12 +2601,13 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
     it("merges converted write array args with existing write action array args", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2605,7 +2618,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2613,24 +2626,21 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
         },
         data: {
           email: faker.internet.email(),
           posts: {
             update: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: { title: faker.lorem.sentence() },
               },
             ],
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       });
@@ -2653,12 +2663,13 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
     it("merges converted write args with existing write action args when nested in action array", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2669,7 +2680,7 @@ describe("operations", () => {
                 where: { id: params.args.id },
                 data: { deleted: true },
               },
-              "update"
+              "update",
             );
           }
 
@@ -2677,25 +2688,25 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
         where: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
         },
         data: {
           email: faker.internet.email(),
           posts: {
             update: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: {
                   title: faker.lorem.sentence(),
                   comments: {
                     update: {
-                      where: { id: faker.datatype.number() },
+                      where: { id: faker.number.float() },
                       data: { content: "test comment content" },
                     },
-                    delete: { id: faker.datatype.number() },
+                    delete: { id: faker.number.float() },
                   },
                 },
               },
@@ -2715,12 +2726,13 @@ describe("operations", () => {
               data: { deleted: true },
             },
           ],
-        })
+        }),
       );
     });
 
     it("merges operations converted to createMany with existing createMany", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2735,7 +2747,7 @@ describe("operations", () => {
                   },
                 ],
               },
-              "createMany"
+              "createMany",
             );
           }
 
@@ -2749,7 +2761,7 @@ describe("operations", () => {
                   },
                 ],
               },
-              "createMany"
+              "createMany",
             );
           }
 
@@ -2757,9 +2769,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -2769,12 +2781,12 @@ describe("operations", () => {
             },
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: "first-upsert" },
                 update: { title: "first-upsert" },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: "second-upsert" },
                 update: { title: "second-upsert" },
               },
@@ -2786,7 +2798,7 @@ describe("operations", () => {
 
       // spread data here as a fix to: https://github.com/facebook/jest/issues/8475
       expect(query).toHaveBeenCalledTimes(1);
-      expect([...query.mock.calls[0][0].data.posts.createMany.data]).toEqual([
+      expect([...(query.mock.calls[0]?.[0].data.posts.createMany.data ?? [])]).toEqual([
         { title: "pre-existing" },
         { title: "first-create", number: 1 },
         { title: "second-create", number: 2 },
@@ -2797,6 +2809,7 @@ describe("operations", () => {
 
     it("merges operations converted to upsert action on toOne relation with existing upsert action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2806,7 +2819,7 @@ describe("operations", () => {
               {
                 create: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
           if (params.operation === "update" && params.scope) {
@@ -2814,7 +2827,7 @@ describe("operations", () => {
               {
                 update: params.args,
               },
-              "upsert"
+              "upsert",
             );
           }
 
@@ -2822,9 +2835,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -2852,12 +2865,13 @@ describe("operations", () => {
               ...params.args.data.profile.update,
             },
           },
-        })
+        }),
       );
     });
 
     it("merges operations converted to create action on toOne relation with existing create action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2873,9 +2887,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -2898,12 +2912,13 @@ describe("operations", () => {
             ...params.args.data.profile.update,
             ...params.args.data.profile.upsert.create,
           },
-        })
+        }),
       );
     });
 
     it("merges operations converted to update action on toOne relation with existing update action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2920,9 +2935,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -2945,12 +2960,13 @@ describe("operations", () => {
             ...params.args.data.profile.create,
             ...params.args.data.profile.upsert.update,
           },
-        })
+        }),
       );
     });
 
     it("merges connect action on toOne relation with existing connect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -2960,7 +2976,7 @@ describe("operations", () => {
               {
                 id: params.args.id,
               },
-              "connect"
+              "connect",
             );
           }
 
@@ -2968,14 +2984,14 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
-            create: { id: faker.datatype.number() },
-            connect: { id: faker.datatype.number() },
+            create: { id: faker.number.float() },
+            connect: { id: faker.number.float() },
           },
         },
       });
@@ -2984,12 +3000,13 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "data.profile", {
           connect: { id: params.args.data.profile.create.id },
-        })
+        }),
       );
     });
 
     it("merges connectOrCreate action on toOne relation with existing connectOrCreate action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3006,9 +3023,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -3017,11 +3034,11 @@ describe("operations", () => {
               age: 20,
             },
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: { bio: faker.lorem.sentence() },
             },
             update: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
           },
         },
@@ -3037,12 +3054,13 @@ describe("operations", () => {
               ...params.args.data.profile.create,
             },
           },
-        })
+        }),
       );
     });
 
     it("merges disconnect where action with existing disconnect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3055,23 +3073,23 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             disconnect: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
             },
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: "first-upsert" },
                 update: { title: "first-upsert" },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 create: { title: "second-upsert" },
                 update: { title: "second-upsert" },
               },
@@ -3088,12 +3106,13 @@ describe("operations", () => {
             get(params, "args.data.posts.upsert.0.where"),
             get(params, "args.data.posts.upsert.1.where"),
           ],
-        })
+        }),
       );
     });
 
     it("replaces existing disconnect true action with new disconnect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3106,9 +3125,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -3121,13 +3140,12 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { disconnect: false })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { disconnect: false }));
     });
 
     it("replaces existing disconnect false action with new disconnect action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3140,9 +3158,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -3155,13 +3173,12 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { disconnect: true })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { disconnect: true }));
     });
 
     it("replaces existing delete true action with new delete action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3174,9 +3191,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -3189,13 +3206,12 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { delete: true })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { delete: true }));
     });
 
     it("replaces existing delete false action with new delete action", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3208,9 +3224,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -3223,13 +3239,12 @@ describe("operations", () => {
       });
       await allOperations(params);
 
-      expect(query).toHaveBeenCalledWith(
-        set(params.args, "data.profile", { delete: false })
-      );
+      expect(query).toHaveBeenCalledWith(set(params.args, "data.profile", { delete: false }));
     });
 
     it("replaces existing include with select changed to include", async () => {
       const allOperations = withNestedOperations({
+        dmmf,
         $rootOperation: (params) => {
           return params.query(params.args);
         },
@@ -3242,9 +3257,9 @@ describe("operations", () => {
         },
       });
 
-      const query = jest.fn((_: any) => Promise.resolve(null));
+      const query = vi.fn((_: any) => Promise.resolve(null));
       const params = createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: {
             select: { deleted: true },
@@ -3258,7 +3273,7 @@ describe("operations", () => {
       expect(query).toHaveBeenCalledWith(
         set(params.args, "include.posts", {
           include: { deleted: true },
-        })
+        }),
       );
     });
   });

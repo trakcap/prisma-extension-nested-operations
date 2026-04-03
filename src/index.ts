@@ -1,9 +1,8 @@
 export { withNestedOperations } from "./lib/nestedOperations";
-
 export {
-  NestedReadOperation,
-  NestedWriteOperation,
+  ExecuteFunction,
   NestedOperation,
   NestedParams,
-  ExecuteFunction,
+  NestedReadOperation,
+  NestedWriteOperation,
 } from "./lib/types";

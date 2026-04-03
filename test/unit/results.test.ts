@@ -1,6 +1,7 @@
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 
@@ -18,6 +19,7 @@ function addReturnedDate(result: any) {
 describe("modifying results", () => {
   it("returns null successfully", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -26,9 +28,9 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() => Promise.resolve(null));
+    const query = vi.fn(() => Promise.resolve(null));
     const params = createParams(query, "User", "findUnique", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
     });
     const result = await allOperations(params);
 
@@ -37,6 +39,7 @@ describe("modifying results", () => {
 
   it("returns count successfully", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -45,7 +48,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() => Promise.resolve(1));
+    const query = vi.fn(() => Promise.resolve(1));
     const params = createParams(query, "User", "count", {});
     const result = await allOperations(params);
 
@@ -54,6 +57,7 @@ describe("modifying results", () => {
 
   it("returns correct result by default", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -64,11 +68,11 @@ describe("modifying results", () => {
 
     const email = faker.internet.email();
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email,
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: { email },
@@ -83,6 +87,7 @@ describe("modifying results", () => {
 
   it("returns correct result when relations are included", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -93,24 +98,24 @@ describe("modifying results", () => {
 
     const clientResult = [
       {
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         title: faker.lorem.sentence(),
         author: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           email: faker.internet.email(),
           profile: null,
           posts: [
             {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               title: faker.lorem.sentence(),
               comments: [
-                { id: faker.datatype.number(), content: faker.lorem.text() },
-                { id: faker.datatype.number(), content: faker.lorem.text() },
-                { id: faker.datatype.number(), content: faker.lorem.text() },
+                { id: faker.number.float(), content: faker.lorem.text() },
+                { id: faker.number.float(), content: faker.lorem.text() },
+                { id: faker.number.float(), content: faker.lorem.text() },
               ],
             },
             {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               title: faker.lorem.sentence(),
               comments: null,
             },
@@ -118,28 +123,28 @@ describe("modifying results", () => {
         },
         comments: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             content: faker.lorem.paragraph(),
             author: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               email: faker.internet.email(),
             },
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             content: faker.lorem.paragraph(),
             author: null,
           },
         ],
       },
       {
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         title: faker.lorem.sentence(),
         author: null,
         comments: null,
       },
     ];
-    const query = jest.fn(() => Promise.resolve(clientResult));
+    const query = vi.fn(() => Promise.resolve(clientResult));
     const params = createParams(query, "Post", "findMany", {
       where: { title: faker.lorem.sentence() },
       include: {
@@ -154,6 +159,7 @@ describe("modifying results", () => {
 
   it("returns correct result when relations are selected", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -183,7 +189,7 @@ describe("modifying results", () => {
         comments: [
           {
             author: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               email: faker.internet.email(),
             },
           },
@@ -196,7 +202,7 @@ describe("modifying results", () => {
         comments: null,
       },
     ];
-    const query = jest.fn(() => Promise.resolve(clientResult));
+    const query = vi.fn(() => Promise.resolve(clientResult));
     const params = createParams(query, "Post", "findMany", {
       where: { title: faker.lorem.sentence() },
       select: {
@@ -228,6 +234,7 @@ describe("modifying results", () => {
 
   it("returns correct result when relations are included and selected", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -238,14 +245,14 @@ describe("modifying results", () => {
 
     const clientResult = [
       {
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         title: faker.lorem.sentence(),
         author: {
           email: faker.internet.email(),
           profile: null,
           posts: [
             {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               title: faker.lorem.sentence(),
               comments: [
                 { content: faker.lorem.text() },
@@ -254,7 +261,7 @@ describe("modifying results", () => {
               ],
             },
             {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               title: faker.lorem.sentence(),
               comments: null,
             },
@@ -262,28 +269,28 @@ describe("modifying results", () => {
         },
         comments: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             content: faker.lorem.text(),
             author: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               email: faker.internet.email(),
             },
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             content: faker.lorem.text(),
             author: null,
           },
         ],
       },
       {
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         title: faker.lorem.sentence(),
         author: null,
         comments: null,
       },
     ];
-    const query = jest.fn(() => Promise.resolve(clientResult));
+    const query = vi.fn(() => Promise.resolve(clientResult));
     const params = createParams(query, "Post", "findMany", {
       where: { title: faker.lorem.sentence() },
       include: {
@@ -311,6 +318,7 @@ describe("modifying results", () => {
 
   it("supports modifying root result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: async (params) => {
         const result = await params.query(params.args);
         return addReturnedDate(result);
@@ -321,11 +329,11 @@ describe("modifying results", () => {
     });
 
     const email = faker.internet.email();
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email,
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: { email },
@@ -344,6 +352,7 @@ describe("modifying results", () => {
       $allNestedOperations: (params) => {
         return params.query(params.args);
       },
+      dmmf,
       $rootOperation: async (params) => {
         const result = await params.query(params.args);
         await wait(100);
@@ -352,11 +361,11 @@ describe("modifying results", () => {
     });
 
     const email = faker.internet.email();
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email,
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: { email },
@@ -372,6 +381,7 @@ describe("modifying results", () => {
 
   it("supports modifying included results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -387,17 +397,17 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -425,6 +435,7 @@ describe("modifying results", () => {
 
   it("supports modifying included results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -441,17 +452,17 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -479,6 +490,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -494,17 +506,17 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -532,6 +544,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -548,17 +561,17 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -586,6 +599,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple included relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -593,10 +607,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -604,28 +615,28 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       include: {
         profile: true,
         posts: true,
@@ -658,6 +669,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple included relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -665,10 +677,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -677,28 +686,28 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       include: {
         profile: true,
         posts: true,
@@ -731,6 +740,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple selected relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -738,10 +748,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -749,28 +756,28 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       select: {
         profile: true,
         posts: true,
@@ -803,6 +810,7 @@ describe("modifying results", () => {
 
   it("supports modifying multiple selected relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -810,10 +818,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -822,28 +827,28 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "findUnique", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       select: {
         profile: true,
         posts: true,
@@ -876,6 +881,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -891,25 +897,25 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -917,7 +923,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -971,6 +977,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -987,25 +994,25 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1013,7 +1020,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1067,6 +1074,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1082,25 +1090,25 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1108,7 +1116,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1162,6 +1170,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1178,25 +1187,25 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1204,7 +1213,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1258,6 +1267,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results through multiple relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1265,10 +1275,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile", "Comment"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -1276,23 +1283,23 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
           user: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             ],
@@ -1300,19 +1307,19 @@ describe("modifying results", () => {
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1320,7 +1327,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1405,6 +1412,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results through multiple relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1412,10 +1420,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "include" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "include" && ["Post", "Profile", "Comment"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -1424,23 +1429,23 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
           user: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             ],
@@ -1448,19 +1453,19 @@ describe("modifying results", () => {
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1468,7 +1473,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1553,6 +1558,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results through multiple relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1560,10 +1566,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile", "Comment"].includes(params.model)) {
           return addReturnedDate(result);
         }
 
@@ -1571,23 +1574,23 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
           user: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             ],
@@ -1595,19 +1598,19 @@ describe("modifying results", () => {
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1615,7 +1618,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1700,6 +1703,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply selected results through multiple relations asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1707,10 +1711,7 @@ describe("modifying results", () => {
         const result = await params.query(params.args);
         if (!result || !params.model) return;
 
-        if (
-          params.operation === "select" &&
-          ["Post", "Profile", "Comment"].includes(params.model)
-        ) {
+        if (params.operation === "select" && ["Post", "Profile", "Comment"].includes(params.model)) {
           await wait(100);
           return addReturnedDate(result);
         }
@@ -1719,23 +1720,23 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.text(),
           user: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             ],
@@ -1743,19 +1744,19 @@ describe("modifying results", () => {
         },
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -1763,7 +1764,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1848,6 +1849,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results in nested include", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1863,23 +1865,23 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1917,6 +1919,7 @@ describe("modifying results", () => {
 
   it("supports modifying selected results in nested include asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -1932,23 +1935,23 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
               },
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -1986,6 +1989,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results in nested select", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2001,21 +2005,21 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -2023,7 +2027,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -2071,6 +2075,7 @@ describe("modifying results", () => {
 
   it("supports modifying deeply included results in nested select asynchronously", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2087,21 +2092,21 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn((args) =>
+    const query = vi.fn((args) =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: args.data.email,
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: args.data.posts.create.title,
             comments: [
               {
-                id: faker.datatype.number(),
+                id: faker.number.float(),
                 content: faker.lorem.sentence(),
                 replies: [
                   {
-                    id: faker.datatype.number(),
+                    id: faker.number.float(),
                     content: faker.lorem.sentence(),
                   },
                 ],
@@ -2109,7 +2114,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "User", "create", {
       data: {
@@ -2157,6 +2162,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2169,19 +2175,19 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         title: faker.lorem.sentence(),
         author: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           email: faker.internet.email(),
         },
-      })
+      }),
     );
 
     const params = createParams(query, "Post", "findFirst", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       include: { author: true },
     });
 
@@ -2196,6 +2202,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations in list results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2208,34 +2215,34 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve([
         {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           title: faker.lorem.sentence(),
           author: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
             deleted: true,
           },
         },
         {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           title: faker.lorem.sentence(),
           author: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
           },
         },
         {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           title: faker.lorem.sentence(),
           author: null,
         },
-      ])
+      ]),
     );
     const params = createParams(query, "Post", "findMany", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       include: { author: true },
     });
 
@@ -2265,6 +2272,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations nested in toOne result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2277,24 +2285,24 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve([
         {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           title: faker.lorem.sentence(),
           author: {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             email: faker.internet.email(),
             profile: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               bio: faker.lorem.paragraph(),
             },
           },
         },
-      ])
+      ]),
     );
     const params = createParams(query, "Post", "findMany", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       include: {
         author: {
           include: { profile: true },
@@ -2319,6 +2327,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne relations nested in toMany results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2331,32 +2340,32 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         title: faker.lorem.sentence(),
         comments: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             content: faker.lorem.paragraph(),
             author: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               email: faker.internet.email(),
             },
           },
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             content: faker.lorem.paragraph(),
             author: {
-              id: faker.datatype.number(),
+              id: faker.number.float(),
               email: faker.internet.email(),
             },
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "findUnique", {
-      where: { id: faker.datatype.number() },
+      where: { id: faker.number.float() },
       include: {
         comments: {
           include: { author: true },
@@ -2386,6 +2395,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toOne result with nested results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2401,7 +2411,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         author: {
           deleted: true,
@@ -2411,7 +2421,7 @@ describe("modifying results", () => {
             bio: "foo",
           },
         },
-      })
+      }),
     );
     const params = createParams(query, "Post", "update", {
       where: { id: 1 },
@@ -2434,6 +2444,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2446,13 +2457,13 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         comments: [
           { deleted: true, id: 1, content: "foo" },
           { id: 2, content: "bar" },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "update", {
       where: { id: 1 },
@@ -2471,6 +2482,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results in list results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2483,7 +2495,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve([
         {
           id: 1,
@@ -2499,7 +2511,7 @@ describe("modifying results", () => {
             { id: 6, content: "qux" },
           ],
         },
-      ])
+      ]),
     );
     const params = createParams(query, "Post", "findMany", {
       where: { id: 1 },
@@ -2518,6 +2530,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results in nested toOne result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2530,7 +2543,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: 1,
         content: "foo",
@@ -2541,7 +2554,7 @@ describe("modifying results", () => {
             { deleted: true, id: 1, content: "baz" },
           ],
         },
-      })
+      }),
     );
     const params = createParams(query, "Comment", "findUnique", {
       where: { id: 1 },
@@ -2568,6 +2581,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results in nested toMany result", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2580,7 +2594,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: 1,
         content: "foo",
@@ -2602,7 +2616,7 @@ describe("modifying results", () => {
             ],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "findUnique", {
       where: { id: 1 },
@@ -2637,6 +2651,7 @@ describe("modifying results", () => {
 
   it("supports filtering nested toMany results with nested results", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: (params) => {
         return params.query(params.args);
       },
@@ -2649,7 +2664,7 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
         id: 1,
         comments: [
@@ -2670,7 +2685,7 @@ describe("modifying results", () => {
             replies: [],
           },
         ],
-      })
+      }),
     );
     const params = createParams(query, "Post", "findUnique", {
       where: { id: 1 },
@@ -2701,6 +2716,7 @@ describe("modifying results", () => {
 
   it("waits for all middleware to finish modifying result before resolving", async () => {
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation: async (params) => {
         const result = await params.query(params.args);
         await wait(300);
@@ -2723,21 +2739,21 @@ describe("modifying results", () => {
       },
     });
 
-    const query = jest.fn(() =>
+    const query = vi.fn(() =>
       Promise.resolve({
-        id: faker.datatype.number(),
+        id: faker.number.float(),
         email: faker.internet.email(),
         posts: [
           {
-            id: faker.datatype.number(),
+            id: faker.number.float(),
             title: faker.lorem.sentence(),
           },
         ],
         profile: {
-          id: faker.datatype.number(),
+          id: faker.number.float(),
           bio: faker.lorem.sentence(),
         },
-      })
+      }),
     );
     const params = createParams(query, "User", "findFirst", {
       where: { id: 1 },

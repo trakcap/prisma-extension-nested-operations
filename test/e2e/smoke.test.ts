@@ -1,8 +1,8 @@
-import { Post, Prisma, User } from "@prisma/client";
-import faker from "faker";
-import { set } from "lodash";
+import { faker } from "@faker-js/faker";
 
+import { type Post, Prisma, type User } from "../../prisma/__generated__";
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import client from "./client";
 
 describe("smoke", () => {
@@ -78,6 +78,7 @@ describe("smoke", () => {
               $allNestedOperations: ({ args, query }) => {
                 return query(args);
               },
+              dmmf,
             }),
           },
         },
@@ -177,6 +178,7 @@ describe("smoke", () => {
               $allNestedOperations: ({ args, query }) => {
                 return query(args);
               },
+              dmmf,
             }),
           },
         },
@@ -184,9 +186,7 @@ describe("smoke", () => {
     });
 
     it("calls middleware with groupBy action", async () => {
-      await expect(testClient.comment.findMany()).rejects.toThrowError(
-        "expected groupBy action"
-      );
+      await expect(testClient.comment.findMany()).rejects.toThrowError("expected groupBy action");
 
       const groupBy = await testClient.comment.groupBy({
         by: ["authorId"],
@@ -220,6 +220,7 @@ describe("smoke", () => {
                 }
                 return query(args);
               },
+              dmmf,
             }),
           },
         },

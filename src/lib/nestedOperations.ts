@@ -1,60 +1,58 @@
-import { Prisma } from "@prisma/client";
-import { Types } from "@prisma/client/runtime/library";
+import type { Types } from "@prisma/client/runtime/client";
 
-import { OperationCall, NestedParams } from "./types";
-import { extractNestedOperations } from "./utils/extractNestedOperations";
+import type { DMMF, NestedParams, OperationCall } from "./types";
 import { executeOperation } from "./utils/execution";
+import { extractNestedOperations } from "./utils/extractNestedOperations";
 import { buildArgsFromCalls } from "./utils/params";
-import { buildTargetRelationPath } from "./utils/targets";
 import {
   addIdSymbolsToResult,
   getRelationResult,
   stripIdSymbolsFromResult,
   updateResultRelation,
 } from "./utils/results";
+import { buildTargetRelationPath } from "./utils/targets";
 
 type NonNullable<T> = Exclude<T, null | undefined>;
 
-function isFulfilled(
-  result: PromiseSettledResult<any>
-): result is PromiseFulfilledResult<any> {
+type RootOperationCb<TypeMap extends Types.Extensions.TypeMapDef> = NonNullable<
+  Types.Extensions.DynamicQueryExtensionArgs<
+    { $allModels: { $allOperations: any } },
+    TypeMap
+  >["$allModels"]["$allOperations"]
+>;
+
+type RootOperation<TypeMap extends Types.Extensions.TypeMapDef> = (
+  args: Parameters<RootOperationCb<TypeMap>>[0],
+) => ReturnType<RootOperationCb<TypeMap>>;
+
+function isFulfilled(result: PromiseSettledResult<any>): result is PromiseFulfilledResult<any> {
   return result.status === "fulfilled";
 }
 
-function isRejected(
-  result: PromiseSettledResult<any>
-): result is PromiseRejectedResult {
+function isRejected(result: PromiseSettledResult<any>): result is PromiseRejectedResult {
   return result.status === "rejected";
 }
 
 export function withNestedOperations<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
+  TypeMap extends Types.Extensions.TypeMapDef = Types.Extensions.TypeMapDef,
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
 >({
   $rootOperation,
   $allNestedOperations,
+  dmmf,
 }: {
-  $rootOperation: NonNullable<
-    Types.Extensions.DynamicQueryExtensionArgs<
-      { $allModels: { $allOperations: any } },
-      Prisma.TypeMap<ExtArgs>
-    >["$allModels"]["$allOperations"]
-  >;
+  $rootOperation: RootOperation<TypeMap>;
   $allNestedOperations: (params: NestedParams<ExtArgs>) => Promise<any>;
+  dmmf: DMMF;
 }): typeof $rootOperation {
-  return async (rootParams) => {
+  return (async (rootParams: Parameters<RootOperation<TypeMap>>[0]) => {
     let calls: OperationCall<ExtArgs>[] = [];
 
     try {
       const executionResults = await Promise.allSettled(
-        extractNestedOperations(
-          rootParams as NestedParams<ExtArgs>
-        ).map((nestedOperation) =>
-          executeOperation(
-            $allNestedOperations,
-            nestedOperation.params,
-            nestedOperation.target
-          )
-        )
+        extractNestedOperations(dmmf, rootParams as NestedParams<ExtArgs>).map((nestedOperation) =>
+          executeOperation($allNestedOperations, nestedOperation.params, nestedOperation.target),
+        ),
       );
 
       // populate middlewareCalls with successful calls first so we can resolve
@@ -66,10 +64,7 @@ export function withNestedOperations<
       if (failedExecution) throw failedExecution.reason;
 
       // build updated params from middleware calls
-      const updatedArgs = buildArgsFromCalls(
-        calls,
-        rootParams as NestedParams<ExtArgs>
-      );
+      const updatedArgs = buildArgsFromCalls(calls, rootParams as NestedParams<ExtArgs>);
 
       const result = await $rootOperation({
         ...rootParams,
@@ -78,9 +73,11 @@ export function withNestedOperations<
 
       // bail out if result is null
       if (result === null) {
-        calls.forEach((call) => call.queryPromise.resolve(undefined));
+        calls.forEach((call) => {
+          call.queryPromise.resolve(undefined);
+        });
         await Promise.all(calls.map((call) => call.result));
-        return null;
+        return result;
       }
 
       // add id symbols to result so we can use them to update result relations
@@ -109,13 +106,12 @@ export function withNestedOperations<
             relationsPath,
             updatedResult,
           };
-        })
+        }),
       );
 
       // keep only the relevant result updates from nested next results
       const resultUpdates = nestedNextResults.filter(
-        (update): update is { relationsPath: string[]; updatedResult: any } =>
-          !!update
+        (update): update is { relationsPath: string[]; updatedResult: any } => !!update,
       );
 
       resultUpdates
@@ -124,24 +120,14 @@ export function withNestedOperations<
           const remainingUpdates = resultUpdates.slice(i);
           const nextUpdatePath = relationsPath.slice(0, -1).join(".");
 
-          const nextUpdate = remainingUpdates.find(
-            (update) => update?.relationsPath.join(".") === nextUpdatePath
-          );
+          const nextUpdate = remainingUpdates.find((update) => update?.relationsPath.join(".") === nextUpdatePath);
 
           if (nextUpdate) {
-            updateResultRelation(
-              nextUpdate.updatedResult,
-              relationsPath[relationsPath.length - 1],
-              updatedResult
-            );
+            updateResultRelation(nextUpdate.updatedResult, relationsPath.at(-1)!, updatedResult);
             return;
           }
 
-          updateResultRelation(
-            result,
-            relationsPath[relationsPath.length - 1],
-            updatedResult
-          );
+          updateResultRelation(result, relationsPath.at(-1)!, updatedResult);
         });
 
       stripIdSymbolsFromResult(result);
@@ -150,7 +136,9 @@ export function withNestedOperations<
     } catch (e) {
       // if an error occurs reject the nested next functions promises to stop
       // them being pending forever
-      calls.forEach((call) => call.queryPromise.reject(e));
+      calls.forEach((call) => {
+        call.queryPromise.reject(e);
+      });
 
       // wait for all nested middleware to settle before rethrowing
       await Promise.all(calls.map((call) => call.result.catch(() => {})));
@@ -158,5 +146,5 @@ export function withNestedOperations<
       // bubble error up to parent middleware
       throw e;
     }
-  };
+  }) as RootOperation<TypeMap>;
 }

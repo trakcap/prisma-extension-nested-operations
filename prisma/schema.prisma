@@ -1,10 +1,20 @@
 generator client {
-  provider = "prisma-client-js"
+  provider               = "prisma-client-js"
+  output                 = "./__generated__"
+  engineType             = "client"
+  generatedFileExtension = "ts"
+  importFileExtension    = ""
+  moduleFormat           = "esm"
+  runtime                = "nodejs"
+}
+
+generator dmmf {
+  provider = "node prisma/dmmf-generate.js"
+  output   = "../test/dmmf.ts"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {

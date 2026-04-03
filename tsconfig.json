@@ -1,14 +1,8 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "es2019",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "outDir": "./dist",
-    "skipLibCheck": true,
-    "noEmit": true
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
-  "exclude": ["test"]
+  "include": ["src"]
 }

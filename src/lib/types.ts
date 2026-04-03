@@ -1,6 +1,26 @@
-import { Prisma } from "@prisma/client";
-import { Types } from "@prisma/client/runtime/library";
-import { DeferredPromise } from "@open-draft/deferred-promise";
+import type { DeferredPromise } from "@open-draft/deferred-promise";
+import type { PrismaPromise, ReadonlyDeep, Types } from "@prisma/client/runtime/client";
+
+export type DMMF = ReadonlyDeep<{
+  datamodel: {
+    models: {
+      name: string;
+      fields: {
+        isReadOnly: boolean;
+        hasDefaultValue: boolean;
+        kind: string;
+        name: string;
+        isRequired: boolean;
+        isList: boolean;
+        isUnique: boolean;
+        isId: boolean;
+        type: string;
+        relationName?: string;
+      }[];
+    }[];
+  };
+}>;
+export type DMMFField = DMMF["datamodel"]["models"][number]["fields"][number];
 
 export type Modifier = "is" | "isNot" | "some" | "none" | "every";
 export type LogicalOperator = "AND" | "OR" | "NOT";
@@ -19,10 +39,7 @@ export type NestedWriteOperation =
   | "delete"
   | "deleteMany";
 
-export type NestedOperation =
-  | NestedWriteOperation
-  | NestedReadOperation
-  | NestedQueryOperation;
+export type NestedOperation = NestedWriteOperation | NestedReadOperation | NestedQueryOperation;
 
 export type QueryTarget = {
   operation: NestedQueryOperation;
@@ -61,20 +78,19 @@ export type OperationCall<ExtArgs extends Types.Extensions.InternalArgs> = {
 
 export type Scope<ExtArgs extends Types.Extensions.InternalArgs> = {
   parentParams: Omit<NestedParams<ExtArgs>, "query">;
-  relations: { to: Prisma.DMMF.Field; from: Prisma.DMMF.Field };
+  relations: { to: DMMFField; from: DMMFField };
   modifier?: Modifier;
   logicalOperators?: LogicalOperator[];
 };
 
 export type NestedParams<ExtArgs extends Types.Extensions.InternalArgs> = {
-  query: (args: any, operation?: NestedOperation) => Prisma.PrismaPromise<any>;
-  model: keyof Prisma.TypeMap<ExtArgs>['model'];
+  query: (args: any, operation?: NestedOperation) => PrismaPromise<any>;
+  model: string;
   args: any;
   operation: NestedOperation;
   scope?: Scope<ExtArgs>;
 };
 
-export type ExecuteFunction<
-  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
-  T = any
-> = (params: NestedParams<ExtArgs>) => Promise<T>;
+export type ExecuteFunction<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs, T = any> = (
+  params: NestedParams<ExtArgs>,
+) => Promise<T>;

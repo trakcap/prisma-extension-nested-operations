@@ -1,3 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-export default new PrismaClient();
+import { PrismaClient } from "../../prisma/__generated__";
+
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error("DATABASE_URL environment variable is not set");
+}
+export default new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });

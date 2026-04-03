@@ -1,6 +1,7 @@
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 
 import { withNestedOperations } from "../../src";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 
@@ -19,6 +20,7 @@ describe("errors", () => {
       $allNestedOperations: (params) => {
         return params.query(params.args);
       },
+      dmmf,
     });
 
     const query = (_: any) => Promise.resolve({});
@@ -39,6 +41,7 @@ describe("errors", () => {
         }
         return params.query(params.args);
       },
+      dmmf,
     });
 
     const query = (_: any) => Promise.resolve({});
@@ -62,9 +65,10 @@ describe("errors", () => {
       $allNestedOperations: (params) => {
         return params.query(params.args);
       },
+      dmmf,
     });
 
-    const query = jest.fn(() => {
+    const query = vi.fn(() => {
       return createAsyncError();
     });
     const params = createParams(query, "User", "create", {
@@ -89,6 +93,7 @@ describe("errors", () => {
         await createAsyncError();
         return result;
       },
+      dmmf,
     });
 
     const query = (_: any) => Promise.resolve({});
@@ -113,6 +118,7 @@ describe("errors", () => {
         }
         return result;
       },
+      dmmf,
     });
 
     const query = (_: any) => Promise.resolve({});

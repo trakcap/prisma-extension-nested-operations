@@ -1,11 +1,12 @@
-import { Prisma } from "@prisma/client";
-import { Types } from "@prisma/client/runtime/library";
-import faker from "faker";
-import { get } from "lodash";
+import { faker } from "@faker-js/faker";
+import type { Types } from "@prisma/client/runtime/client";
+import { get } from "es-toolkit/compat";
 
-import { withNestedOperations, NestedParams } from "../../src";
-import { relationsByModel } from "../../src/lib/utils/relations";
-import { LogicalOperator, Modifier } from "../../src/lib/types";
+import { Prisma } from "../../prisma/__generated__";
+import { type NestedParams, withNestedOperations } from "../../src";
+import type { DMMFField, LogicalOperator, Modifier } from "../../src/lib/types";
+import { getRelationsByModel } from "../../src/lib/utils/relations";
+import { dmmf } from "../dmmf";
 import { createParams } from "./helpers/createParams";
 
 type OperationCall<Model extends Prisma.ModelName> = {
@@ -29,49 +30,33 @@ type OperationCall<Model extends Prisma.ModelName> = {
   argsPath: string;
   scope?: OperationCall<any>;
   relations: {
-    to: Prisma.DMMF.Field;
-    from: Prisma.DMMF.Field;
+    to: DMMFField;
+    from: DMMFField;
   };
   modifier?: Modifier;
   logicalOperators?: LogicalOperator[];
 };
 
-function nestedParamsFromCall<Model extends Prisma.ModelName,
-ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs
->(
-  rootParams: NestedParams<ExtArgs>,
-  call: OperationCall<Model>
-): NestedParams<ExtArgs> {
-  const params = createParams(
-    query,
-    call.model,
-    call.operation,
-    get(rootParams, call.argsPath)
-  );
+function nestedParamsFromCall<
+  Model extends Prisma.ModelName,
+  ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs,
+>(rootParams: NestedParams<ExtArgs>, call: OperationCall<Model>): NestedParams<ExtArgs> {
+  const params = createParams(query, call.model, call.operation, get(rootParams, call.argsPath));
   return {
     ...params,
     scope: {
       modifier: call.modifier,
       logicalOperators: call.logicalOperators,
       relations: call.relations,
-      parentParams: call.scope
-        ? nestedParamsFromCall(rootParams, call.scope)
-        : rootParams,
+      parentParams: call.scope ? nestedParamsFromCall(rootParams, call.scope) : rootParams,
     },
   };
 }
 
-function getModelRelation<Model extends Prisma.ModelName>(
-  model: Model,
-  relationName: string
-): Prisma.DMMF.Field {
-  const modelRelation = relationsByModel[model].find(
-    (relation) => relation.name === relationName
-  );
+function getModelRelation<Model extends Prisma.ModelName>(model: Model, relationName: string): DMMFField {
+  const modelRelation = getRelationsByModel(dmmf)[model]?.find((relation) => relation.name === relationName);
   if (!modelRelation) {
-    throw new Error(
-      `Unable to find relation ${relationName} on model ${model}`
-    );
+    throw new Error(`Unable to find relation ${relationName} on model ${model}`);
   }
   return modelRelation;
 }
@@ -80,9 +65,10 @@ const query = (_: any) => Promise.resolve({});
 
 describe("calls", () => {
   it("calls middleware once when there are no nested operations", async () => {
-    const $rootOperation = jest.fn((params) => params.query(params.args));
-    const $allNestedOperations = jest.fn((params) => params.query(params.args));
+    const $rootOperation = vi.fn((params) => params.query(params.args));
+    const $allNestedOperations = vi.fn((params) => params.query(params.args));
     const allOperations = withNestedOperations({
+      dmmf,
       $rootOperation,
       $allNestedOperations,
     });
@@ -144,7 +130,7 @@ describe("calls", () => {
     {
       description: "nested create in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: { create: { bio: faker.lorem.paragraph() } },
@@ -165,7 +151,7 @@ describe("calls", () => {
     {
       description: "nested creates in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
           profile: { create: { bio: faker.lorem.paragraph() } },
@@ -239,7 +225,7 @@ describe("calls", () => {
     {
       description: "nested create array in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -280,7 +266,7 @@ describe("calls", () => {
     {
       description: "nested create and update in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -320,7 +306,7 @@ describe("calls", () => {
     {
       description: "nested create array in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
           posts: {
@@ -394,7 +380,7 @@ describe("calls", () => {
     {
       description: "nested update in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: { update: { bio: faker.lorem.paragraph() } },
@@ -415,7 +401,7 @@ describe("calls", () => {
     {
       description: "nested update in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -439,20 +425,20 @@ describe("calls", () => {
     {
       description: "nested update array in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: {
                   title: faker.lorem.sentence(),
                   content: faker.lorem.paragraph(),
                 },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: {
                   title: faker.lorem.sentence(),
                   content: faker.lorem.paragraph(),
@@ -486,7 +472,7 @@ describe("calls", () => {
     {
       description: "nested update array in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -495,14 +481,14 @@ describe("calls", () => {
           posts: {
             update: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: {
                   title: faker.lorem.sentence(),
                   content: faker.lorem.paragraph(),
                 },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: {
                   title: faker.lorem.sentence(),
                   content: faker.lorem.paragraph(),
@@ -536,7 +522,7 @@ describe("calls", () => {
     {
       description: "nested upsert in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
@@ -562,13 +548,13 @@ describe("calls", () => {
     {
       description: "nested upsert list in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             upsert: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 update: { title: faker.lorem.sentence() },
                 create: {
                   title: faker.lorem.sentence(),
@@ -576,7 +562,7 @@ describe("calls", () => {
                 },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 update: { title: faker.lorem.sentence() },
                 create: {
                   title: faker.lorem.sentence(),
@@ -611,7 +597,7 @@ describe("calls", () => {
     {
       description: "nested upsert in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -640,7 +626,7 @@ describe("calls", () => {
     {
       description: "nested delete in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: { delete: true },
@@ -661,7 +647,7 @@ describe("calls", () => {
     {
       description: "nested delete in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -685,14 +671,11 @@ describe("calls", () => {
     {
       description: "nested delete array in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       }),
@@ -720,17 +703,14 @@ describe("calls", () => {
     {
       description: "nested delete array in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
         update: {
           email: faker.internet.email(),
           posts: {
-            delete: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       }),
@@ -791,7 +771,7 @@ describe("calls", () => {
     {
       description: "nested createMany in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -825,7 +805,7 @@ describe("calls", () => {
     {
       description: "nested createMany in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -862,7 +842,7 @@ describe("calls", () => {
     {
       description: "nested updateMany in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
@@ -871,7 +851,7 @@ describe("calls", () => {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
               },
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
             },
           },
         },
@@ -892,14 +872,14 @@ describe("calls", () => {
     {
       description: "nested updateMany array in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             updateMany: [
               {
                 where: {
-                  id: faker.datatype.number(),
+                  id: faker.number.float(),
                 },
                 data: {
                   title: faker.lorem.sentence(),
@@ -908,7 +888,7 @@ describe("calls", () => {
               },
               {
                 where: {
-                  id: faker.datatype.number(),
+                  id: faker.number.float(),
                 },
                 data: {
                   title: faker.lorem.sentence(),
@@ -943,7 +923,7 @@ describe("calls", () => {
     {
       description: "nested updateMany in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -955,7 +935,7 @@ describe("calls", () => {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
               },
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
             },
           },
         },
@@ -975,7 +955,7 @@ describe("calls", () => {
     {
       description: "nested updateMany list in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -984,11 +964,11 @@ describe("calls", () => {
           posts: {
             updateMany: [
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: { title: faker.lorem.sentence() },
               },
               {
-                where: { id: faker.datatype.number() },
+                where: { id: faker.number.float() },
                 data: { title: faker.lorem.sentence() },
               },
             ],
@@ -1019,11 +999,11 @@ describe("calls", () => {
     {
       description: "nested deleteMany in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: { id: faker.datatype.number() },
+            deleteMany: { id: faker.number.float() },
           },
         },
       }),
@@ -1042,14 +1022,11 @@ describe("calls", () => {
     {
       description: "nested deleteMany list in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       }),
@@ -1077,14 +1054,14 @@ describe("calls", () => {
     {
       description: "nested deleteMany in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
         update: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: { id: faker.datatype.number() },
+            deleteMany: { id: faker.number.float() },
           },
         },
       }),
@@ -1103,17 +1080,14 @@ describe("calls", () => {
     {
       description: "nested deleteMany list in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
         update: {
           email: faker.internet.email(),
           posts: {
-            deleteMany: [
-              { id: faker.datatype.number() },
-              { id: faker.datatype.number() },
-            ],
+            deleteMany: [{ id: faker.number.float() }, { id: faker.number.float() }],
           },
         },
       }),
@@ -1141,12 +1115,12 @@ describe("calls", () => {
     {
       description: "nested connectOrCreate in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           profile: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: { bio: faker.lorem.paragraph() },
             },
           },
@@ -1167,7 +1141,7 @@ describe("calls", () => {
     {
       description: "nested connectOrCreate in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -1175,7 +1149,7 @@ describe("calls", () => {
           email: faker.internet.email(),
           profile: {
             connectOrCreate: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               create: { bio: faker.lorem.paragraph() },
             },
           },
@@ -1204,7 +1178,7 @@ describe("calls", () => {
               content: faker.lorem.paragraph(),
               comments: {
                 create: {
-                  authorId: faker.datatype.number(),
+                  authorId: faker.number.float(),
                   content: faker.lorem.paragraph(),
                 },
               },
@@ -1245,20 +1219,20 @@ describe("calls", () => {
     {
       description: "deeply nested update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
                   update: {
-                    where: { id: faker.datatype.number() },
+                    where: { id: faker.number.float() },
                     data: {
-                      authorId: faker.datatype.number(),
+                      authorId: faker.number.float(),
                       content: faker.lorem.paragraph(),
                     },
                   },
@@ -1301,20 +1275,17 @@ describe("calls", () => {
     {
       description: "deeply nested delete",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
-                  delete: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  delete: [{ id: faker.number.float() }, { id: faker.number.float() }],
                 },
               },
             },
@@ -1372,7 +1343,7 @@ describe("calls", () => {
     {
       description: "deeply nested upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -1380,19 +1351,19 @@ describe("calls", () => {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
                   upsert: {
-                    where: { id: faker.datatype.number() },
+                    where: { id: faker.number.float() },
                     create: {
-                      authorId: faker.datatype.number(),
+                      authorId: faker.number.float(),
                       content: faker.lorem.paragraph(),
                     },
                     update: {
-                      authorId: faker.datatype.number(),
+                      authorId: faker.number.float(),
                       content: faker.lorem.paragraph(),
                     },
                   },
@@ -1435,12 +1406,12 @@ describe("calls", () => {
     {
       description: "deeply nested createMany",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
@@ -1448,11 +1419,11 @@ describe("calls", () => {
                   createMany: {
                     data: [
                       {
-                        authorId: faker.datatype.number(),
+                        authorId: faker.number.float(),
                         content: faker.lorem.paragraph(),
                       },
                       {
-                        authorId: faker.datatype.number(),
+                        authorId: faker.number.float(),
                         content: faker.lorem.paragraph(),
                       },
                     ],
@@ -1496,18 +1467,18 @@ describe("calls", () => {
     {
       description: "deeply nested updateMany",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
                   updateMany: {
-                    where: { id: faker.datatype.number() },
+                    where: { id: faker.number.float() },
                     data: {
                       content: faker.lorem.paragraph(),
                     },
@@ -1551,23 +1522,23 @@ describe("calls", () => {
     {
       description: "deeply nested updateMany array",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
                   updateMany: [
                     {
-                      where: { id: faker.datatype.number() },
+                      where: { id: faker.number.float() },
                       data: { content: faker.lorem.paragraph() },
                     },
                     {
-                      where: { id: faker.datatype.number() },
+                      where: { id: faker.number.float() },
                       data: { content: faker.lorem.paragraph() },
                     },
                   ],
@@ -1628,17 +1599,17 @@ describe("calls", () => {
     {
       description: "deeply nested deleteMany",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
-                  deleteMany: { id: faker.datatype.number() },
+                  deleteMany: { id: faker.number.float() },
                 },
               },
             },
@@ -1678,20 +1649,17 @@ describe("calls", () => {
     {
       description: "deeply nested deleteMany array",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
-                  deleteMany: [
-                    { id: faker.datatype.number() },
-                    { id: faker.datatype.number() },
-                  ],
+                  deleteMany: [{ id: faker.number.float() }, { id: faker.number.float() }],
                 },
               },
             },
@@ -1749,20 +1717,20 @@ describe("calls", () => {
     {
       description: "deeply nested connectOrCreate",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
           posts: {
             update: {
-              where: { id: faker.datatype.number() },
+              where: { id: faker.number.float() },
               data: {
                 title: faker.lorem.sentence(),
                 content: faker.lorem.paragraph(),
                 comments: {
                   connectOrCreate: {
-                    where: { id: faker.datatype.number() },
+                    where: { id: faker.number.float() },
                     create: {
-                      authorId: faker.datatype.number(),
+                      authorId: faker.number.float(),
                       content: faker.lorem.paragraph(),
                     },
                   },
@@ -1805,7 +1773,7 @@ describe("calls", () => {
     {
       description: "include in findUnique",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: true,
         },
@@ -1825,7 +1793,7 @@ describe("calls", () => {
     {
       description: "include in findFirst",
       rootParams: createParams(query, "User", "findFirst", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: { posts: true },
       }),
       nestedCalls: [
@@ -1843,7 +1811,7 @@ describe("calls", () => {
     {
       description: "include in findMany",
       rootParams: createParams(query, "User", "findMany", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: { posts: true },
       }),
       nestedCalls: [
@@ -1891,7 +1859,7 @@ describe("calls", () => {
     {
       description: "include in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
         },
@@ -1912,7 +1880,7 @@ describe("calls", () => {
     {
       description: "include in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -1936,7 +1904,7 @@ describe("calls", () => {
     {
       description: "nested includes",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: {
             include: {
@@ -1978,7 +1946,7 @@ describe("calls", () => {
     {
       description: "deeply nested includes",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: {
             include: {
@@ -2051,7 +2019,7 @@ describe("calls", () => {
     {
       description: "select in findUnique",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: {
           posts: true,
         },
@@ -2071,7 +2039,7 @@ describe("calls", () => {
     {
       description: "select in findFirst",
       rootParams: createParams(query, "User", "findFirst", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: { posts: true },
       }),
       nestedCalls: [
@@ -2089,7 +2057,7 @@ describe("calls", () => {
     {
       description: "select in findMany",
       rootParams: createParams(query, "User", "findMany", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: { posts: true },
       }),
       nestedCalls: [
@@ -2137,7 +2105,7 @@ describe("calls", () => {
     {
       description: "select in update",
       rootParams: createParams(query, "User", "update", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         data: {
           email: faker.internet.email(),
         },
@@ -2158,7 +2126,7 @@ describe("calls", () => {
     {
       description: "select in upsert",
       rootParams: createParams(query, "User", "upsert", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         create: {
           email: faker.internet.email(),
         },
@@ -2182,7 +2150,7 @@ describe("calls", () => {
     {
       description: "nested selects",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: {
           posts: {
             select: {
@@ -2224,7 +2192,7 @@ describe("calls", () => {
     {
       description: "deeply nested selects",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: {
           posts: {
             select: {
@@ -2297,7 +2265,7 @@ describe("calls", () => {
     {
       description: "deeply nested selects with custom fields",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: {
           posts: {
             select: {
@@ -2377,7 +2345,7 @@ describe("calls", () => {
     {
       description: "nested select in include",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: {
             select: {
@@ -2437,7 +2405,7 @@ describe("calls", () => {
     {
       description: "nested include in select",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: {
           posts: {
             include: {
@@ -2479,7 +2447,7 @@ describe("calls", () => {
     {
       description: "nested select in nested include",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         include: {
           posts: {
             include: {
@@ -2552,7 +2520,7 @@ describe("calls", () => {
     {
       description: "nested include in nested select",
       rootParams: createParams(query, "User", "findUnique", {
-        where: { id: faker.datatype.number() },
+        where: { id: faker.number.float() },
         select: {
           posts: {
             select: {
@@ -2632,7 +2600,7 @@ describe("calls", () => {
               title: faker.lorem.sentence(),
               comments: {
                 create: {
-                  authorId: faker.datatype.number(),
+                  authorId: faker.number.float(),
                   content: faker.lorem.sentence(),
                 },
               },
@@ -2714,7 +2682,7 @@ describe("calls", () => {
               title: faker.lorem.sentence(),
               comments: {
                 create: {
-                  authorId: faker.datatype.number(),
+                  authorId: faker.number.float(),
                   content: faker.lorem.sentence(),
                 },
               },
@@ -3486,8 +3454,7 @@ describe("calls", () => {
       ],
     },
     {
-      description:
-        "where deeply nested in logical operators with no interim relations",
+      description: "where deeply nested in logical operators with no interim relations",
       rootParams: createParams(query, "User", "findMany", {
         where: {
           NOT: {
@@ -4022,8 +3989,7 @@ describe("calls", () => {
         {
           operation: "where",
           model: "User",
-          argsPath:
-            "args.include.posts.where.comments.some.repliedTo.is.author",
+          argsPath: "args.include.posts.where.comments.some.repliedTo.is.author",
           relations: {
             to: getModelRelation("Comment", "author"),
             from: getModelRelation("User", "comments"),
@@ -4114,30 +4080,28 @@ describe("calls", () => {
         },
       ],
     },
-  ])(
-    "calls middleware with $description",
-    async ({ rootParams, nestedCalls = [] }) => {
-      const $rootOperation = jest.fn((params) => params.query(params.args));
-      const $allNestedOperations = jest.fn((params) => params.query(params.args));
-      const allOperations = withNestedOperations({
-        $rootOperation,
-        $allNestedOperations,
-      });
+  ])("calls middleware with $description", async ({ rootParams, nestedCalls = [] }) => {
+    const $rootOperation = vi.fn((params) => params.query(params.args));
+    const $allNestedOperations = vi.fn((params) => params.query(params.args));
+    const allOperations = withNestedOperations({
+      $rootOperation,
+      $allNestedOperations,
+      dmmf,
+    });
 
-      await allOperations(rootParams as any);
+    await allOperations(rootParams as any);
 
-      expect($rootOperation).toHaveBeenCalledTimes(1);
-      expect($rootOperation).toHaveBeenCalledWith({
-        ...rootParams,
+    expect($rootOperation).toHaveBeenCalledTimes(1);
+    expect($rootOperation).toHaveBeenCalledWith({
+      ...rootParams,
+      query: expect.any(Function),
+    });
+    expect($allNestedOperations).toHaveBeenCalledTimes(nestedCalls.length);
+    nestedCalls.forEach((call) => {
+      expect($allNestedOperations).toHaveBeenCalledWith({
+        ...nestedParamsFromCall(rootParams, call),
         query: expect.any(Function),
       });
-      expect($allNestedOperations).toHaveBeenCalledTimes(nestedCalls.length);
-      nestedCalls.forEach((call) => {
-        expect($allNestedOperations).toHaveBeenCalledWith({
-          ...nestedParamsFromCall(rootParams, call),
-          query: expect.any(Function),
-        });
-      });
-    }
-  );
+    });
+  });
 });

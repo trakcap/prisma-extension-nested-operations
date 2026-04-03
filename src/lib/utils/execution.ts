@@ -1,14 +1,14 @@
-import { Types } from "@prisma/client/runtime/library";
 import { DeferredPromise } from "@open-draft/deferred-promise";
-import { omit } from "lodash";
+import type { Types } from "@prisma/client/runtime/client";
+import { omit } from "es-toolkit/compat";
 
-import { ExecuteFunction, NestedParams, OperationCall, Target } from "../types";
+import type { ExecuteFunction, NestedParams, OperationCall, Target } from "../types";
 import { cloneArgs } from "./cloneArgs";
 
 export async function executeOperation<ExtArgs extends Types.Extensions.InternalArgs = Types.Extensions.DefaultArgs>(
   execute: ExecuteFunction,
   params: NestedParams<ExtArgs>,
-  target: Target
+  target: Target,
 ): Promise<OperationCall<ExtArgs>> {
   const queryCalledPromise = new DeferredPromise<any>();
   const queryPromise = new DeferredPromise<any>();
@@ -18,7 +18,7 @@ export async function executeOperation<ExtArgs extends Types.Extensions.Internal
     query: (updatedArgs, updatedOperation = params.operation) => {
       queryCalledPromise.resolve({
         updatedArgs,
-        updatedOperation
+        updatedOperation,
       });
       return queryPromise;
     },
@@ -43,7 +43,7 @@ export async function executeOperation<ExtArgs extends Types.Extensions.Internal
         operation: updatedOperation,
         args: updatedArgs,
       },
-      omit(target, "index") as Target
+      omit(target, "index") as Target,
     );
   }
 
