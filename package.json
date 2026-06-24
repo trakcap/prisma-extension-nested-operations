@@ -11,7 +11,7 @@
   "engines": {
     "node": "~24.13.0"
   },
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.17.0",
   "exports": {
     ".": {
       "import": {
@@ -38,20 +38,20 @@
   },
   "dependencies": {
     "@open-draft/deferred-promise": "^3.0.0",
-    "es-toolkit": "^1.45.1"
+    "es-toolkit": "^1.48.1"
   },
   "peerDependencies": {
     "@prisma/client": ">=7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
-    "@faker-js/faker": "^10.4.0",
-    "@prisma/adapter-pg": "^7.6.0",
-    "@prisma/client": "^7.6.0",
-    "@prisma/generator-helper": "^7.6.0",
-    "@types/node": "^24.12.0",
-    "prisma": "^7.6.0",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.2"
+    "@biomejs/biome": "^2.5.0",
+    "@faker-js/faker": "^10.5.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@prisma/generator-helper": "^7.8.0",
+    "@types/node": "^24.13.2",
+    "prisma": "^7.8.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
