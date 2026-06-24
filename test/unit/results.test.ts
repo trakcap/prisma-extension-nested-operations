@@ -1,7 +1,11 @@
+import { describe, it } from "node:test";
+
 import { faker } from "@faker-js/faker";
 
 import { withNestedOperations } from "../../src";
 import { dmmf } from "../dmmf";
+import { expect } from "../helpers/expect";
+import { vi } from "../helpers/vi";
 import { createParams } from "./helpers/createParams";
 import { wait } from "./helpers/wait";
 

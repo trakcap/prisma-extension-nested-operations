@@ -1,3 +1,3 @@
-export function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import { setTimeout } from "node:timers/promises";
+
+export const wait = (ms: number) => setTimeout(ms);
