@@ -1,3 +1,5 @@
+import { describe, it } from "node:test";
+
 import { faker } from "@faker-js/faker";
 import type { Types } from "@prisma/client/runtime/client";
 import { get } from "es-toolkit/compat";
@@ -7,6 +9,8 @@ import { type NestedParams, withNestedOperations } from "../../src";
 import type { DMMFField, LogicalOperator, Modifier } from "../../src/lib/types";
 import { getRelationsByModel } from "../../src/lib/utils/relations";
 import { dmmf } from "../dmmf";
+import { expect } from "../helpers/expect";
+import { vi } from "../helpers/vi";
 import { createParams } from "./helpers/createParams";
 
 type OperationCall<Model extends Prisma.ModelName> = {
@@ -87,11 +91,11 @@ describe("calls", () => {
     expect($allNestedOperations).not.toHaveBeenCalled();
   });
 
-  it.each<{
+  const cases: Array<{
     description: string;
     rootParams: NestedParams<Types.Extensions.DefaultArgs>;
     nestedCalls?: OperationCall<any>[];
-  }>([
+  }> = [
     {
       description: "count",
       rootParams: createParams(query, "User", "count", undefined),
@@ -4080,28 +4084,31 @@ describe("calls", () => {
         },
       ],
     },
-  ])("calls middleware with $description", async ({ rootParams, nestedCalls = [] }) => {
-    const $rootOperation = vi.fn((params) => params.query(params.args));
-    const $allNestedOperations = vi.fn((params) => params.query(params.args));
-    const allOperations = withNestedOperations({
-      $rootOperation,
-      $allNestedOperations,
-      dmmf,
-    });
+  ];
+  for (const { description, rootParams, nestedCalls = [] } of cases) {
+    it(`calls middleware with ${description}`, async () => {
+      const $rootOperation = vi.fn((params) => params.query(params.args));
+      const $allNestedOperations = vi.fn((params) => params.query(params.args));
+      const allOperations = withNestedOperations({
+        $rootOperation,
+        $allNestedOperations,
+        dmmf,
+      });
 
-    await allOperations(rootParams as any);
+      await allOperations(rootParams as any);
 
-    expect($rootOperation).toHaveBeenCalledTimes(1);
-    expect($rootOperation).toHaveBeenCalledWith({
-      ...rootParams,
-      query: expect.any(Function),
-    });
-    expect($allNestedOperations).toHaveBeenCalledTimes(nestedCalls.length);
-    nestedCalls.forEach((call) => {
-      expect($allNestedOperations).toHaveBeenCalledWith({
-        ...nestedParamsFromCall(rootParams, call),
+      expect($rootOperation).toHaveBeenCalledTimes(1);
+      expect($rootOperation).toHaveBeenCalledWith({
+        ...rootParams,
         query: expect.any(Function),
       });
+      expect($allNestedOperations).toHaveBeenCalledTimes(nestedCalls.length);
+      nestedCalls.forEach((call) => {
+        expect($allNestedOperations).toHaveBeenCalledWith({
+          ...nestedParamsFromCall(rootParams, call),
+          query: expect.any(Function),
+        });
+      });
     });
-  });
+  }
 });

@@ -11,7 +11,7 @@
   "engines": {
     "node": "~24.13.0"
   },
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.17.0",
   "exports": {
     ".": {
       "import": {
@@ -27,10 +27,11 @@
     "build": "rm -rf dist && tsc",
     "prepare": "/bin/sh -c 'if type git >/dev/null 2>&1; then git config core.hooksPath .git-hooks; else true; fi'",
     "prisma:generate": "prisma generate && biome format --fix test/dmmf.ts",
-    "test:unit": "yarn prisma:generate && vitest run test/unit",
-    "test:e2e": " yarn prisma:generate && ./test/scripts/run-with-postgres.sh vitest run test/e2e",
-    "test": "yarn prisma:generate && ./test/scripts/run-with-postgres.sh vitest run",
-    "test:ci": "yarn prisma:generate && ./test/scripts/run-with-postgres.sh ci vitest run",
+    "node-test": "node --import tsx --test",
+    "test:unit": "yarn prisma:generate && yarn node-test test/unit/*.test.ts",
+    "test:e2e": " yarn prisma:generate && ./test/scripts/run-with-postgres.sh yarn node-test test/e2e/*.test.ts",
+    "test": "yarn prisma:generate && ./test/scripts/run-with-postgres.sh yarn node-test test/unit/*.test.ts test/e2e/*.test.ts",
+    "test:ci": "yarn prisma:generate && ./test/scripts/run-with-postgres.sh ci yarn node-test test/unit/*.test.ts test/e2e/*.test.ts",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "lint:ci": "biome ci --reporter=github",
@@ -44,14 +45,18 @@
     "@prisma/client": ">=7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
-    "@faker-js/faker": "^10.4.0",
-    "@prisma/adapter-pg": "^7.6.0",
-    "@prisma/client": "^7.6.0",
-    "@prisma/generator-helper": "^7.6.0",
-    "@types/node": "^24.12.0",
-    "prisma": "^7.6.0",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.2"
+    "@biomejs/biome": "^2.5.0",
+    "@faker-js/faker": "^10.5.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@prisma/generator-helper": "^7.8.0",
+    "@types/chai": "^5.2.3",
+    "@types/node": "^24.13.2",
+    "@vitest/expect": "^4.1.9",
+    "@vitest/spy": "^4.1.9",
+    "chai": "^6.2.2",
+    "prisma": "^7.8.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   }
 }
