@@ -4,11 +4,10 @@ const cache = new WeakMap<object, Record<string, DMMFField[]>>();
 export function getRelationsByModel(dmmf: DMMF) {
   let relationsByModel = cache.get(dmmf);
   if (!relationsByModel) {
-    relationsByModel = dmmf.datamodel.models.reduce<Record<string, DMMFField[]>>( (acc, model) => {
-        acc[model.name] = model.fields.filter((field) => field.kind === "object" && field.relationName);
-        return acc;
-      },
-      {});
+    relationsByModel = dmmf.datamodel.models.reduce<Record<string, DMMFField[]>>((acc, model) => {
+      acc[model.name] = model.fields.filter((field) => field.kind === "object" && field.relationName);
+      return acc;
+    }, {});
     cache.set(dmmf, relationsByModel);
   }
   return relationsByModel;
