@@ -1,6 +1,6 @@
 {
   "name": "@trakcap/prisma-extension-nested-operations",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utils for creating Prisma client extensions with nested operations",
   "author": "Olivier Wilkinson",
   "license": "Apache-2.0",
@@ -9,9 +9,9 @@
     "url": "git+https://github.com/trakcap/prisma-extension-nested-operations.git"
   },
   "engines": {
-    "node": "~24.13.0"
+    "node": "~24.18.0"
   },
-  "packageManager": "yarn@4.17.0",
+  "packageManager": "yarn@4.17.1",
   "exports": {
     ".": {
       "import": {
@@ -39,24 +39,21 @@
   },
   "dependencies": {
     "@open-draft/deferred-promise": "^3.0.0",
-    "es-toolkit": "^1.45.1"
-  },
-  "peerDependencies": {
-    "@prisma/client": ">=7"
+    "@prisma/client": ">=7",
+    "es-toolkit": "^1.49.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
+    "@biomejs/biome": "^2.5.2",
     "@faker-js/faker": "^10.5.0",
     "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
     "@prisma/generator-helper": "^7.8.0",
     "@types/chai": "^5.2.3",
-    "@types/node": "^24.13.2",
-    "@vitest/expect": "^4.1.9",
-    "@vitest/spy": "^4.1.9",
+    "@types/node": "^24.13.3",
+    "@vitest/expect": "^4.1.10",
+    "@vitest/spy": "^4.1.10",
     "chai": "^6.2.2",
     "prisma": "^7.8.0",
-    "tsx": "^4.22.4",
-    "typescript": "^6.0.3"
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
   }
 }
