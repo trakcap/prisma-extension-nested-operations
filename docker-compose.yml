@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: "postgres:17.7"
+    image: "postgres:18.3"
     hostname: postgres
     user: postgres
     restart: always

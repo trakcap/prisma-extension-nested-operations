@@ -117,20 +117,30 @@ function moveOperationChangesToEnd(
   callA: { target: Target; origin: Target },
   callB: { target: Target; origin: Target },
 ) {
-  if (callA.target.operation !== callA.origin.operation) {
-    return 1;
-  }
-  if (callB.target.operation !== callB.origin.operation) {
-    return -1;
-  }
-  return 0;
+  const aChanged = callA.target.operation !== callA.origin.operation;
+  const bChanged = callB.target.operation !== callB.origin.operation;
+  return (aChanged ? 1 : 0) - (bChanged ? 1 : 0);
 }
 
-function findParentCall<Call extends { origin: Target }>(calls: Call[], origin: Target): Call | undefined {
-  return calls.find(
-    (call) =>
-      origin.parentTarget && buildTargetPath(origin.parentTarget).join(".") === buildTargetPath(call.origin).join("."),
-  );
+function findParentCall<Call extends { origin: Target }>(
+  calls: Call[],
+  origin: Target,
+  startIndex = 0,
+): Call | undefined {
+  if (!origin.parentTarget) return undefined;
+
+  // the parent path is invariant across the search, so build it once instead of
+  // rebuilding it for every candidate call
+  const parentKey = buildTargetPath(origin.parentTarget).join(".");
+
+  for (let i = startIndex; i < calls.length; i++) {
+    const call = calls[i];
+    if (call && buildTargetPath(call.origin).join(".") === parentKey) {
+      return call;
+    }
+  }
+
+  return undefined;
 }
 
 export function buildArgsFromCalls<
@@ -143,7 +153,7 @@ export function buildArgsFromCalls<
 
   // sort calls so we set from deepest to shallowest
   // actions that are at the same depth should put action changes at the end
-  const sortedCalls = calls.sort((a, b) => {
+  const sortedCalls = calls.toSorted((a, b) => {
     const aDepth = targetChainLength(a.target);
     const bDepth = targetChainLength(b.target);
 
@@ -156,7 +166,7 @@ export function buildArgsFromCalls<
 
   // eslint-disable-next-line complexity
   sortedCalls.forEach((call, i) => {
-    const parentCall = findParentCall(calls.slice(i), call.origin);
+    const parentCall = findParentCall(sortedCalls, call.origin, i);
     const parentArgs = parentCall?.updatedArgs || finalArgs;
     const parentOperation = parentCall?.target.operation || rootParams.operation;
 
