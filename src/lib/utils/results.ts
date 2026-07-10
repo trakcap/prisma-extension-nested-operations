@@ -17,17 +17,28 @@ function stripIdSymbolsFromObject(obj: Record<string | symbol, any>) {
   }
 }
 
+// Only descend into arrays and plain objects. Scalar values that are technically
+// `typeof === "object"` (Date, Prisma Decimal, Buffer/Uint8Array, etc.) must not
+// be walked: they never hold relations, and tagging them with id symbols is both
+// wasted work and pollutes the returned model instances until they are stripped.
+function isTraversable(value: any): boolean {
+  if (Array.isArray(value)) return true;
+  if (typeof value !== "object" || value === null) return false;
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
 export function addIdSymbolsToResult(result: any, parentId?: number, startId = 1): number {
   let id = startId;
 
   if (Array.isArray(result)) {
     result.forEach((item) => {
-      if (typeof item === "object" && item !== null) {
+      if (isTraversable(item)) {
         addIdSymbolsToObject(item, id, parentId);
         id += 1;
 
         Object.getOwnPropertyNames(item).forEach((key) => {
-          if (typeof item[key] === "object" && item[key] !== null) {
+          if (isTraversable(item[key])) {
             id = addIdSymbolsToResult(item[key], item[idSymbol], id);
           }
         });
@@ -37,12 +48,12 @@ export function addIdSymbolsToResult(result: any, parentId?: number, startId = 1
     return id;
   }
 
-  if (typeof result === "object" && result !== null) {
+  if (isTraversable(result)) {
     addIdSymbolsToObject(result, id, parentId);
     id += 1;
 
     Object.getOwnPropertyNames(result).forEach((key) => {
-      if (typeof result[key] === "object" && result[key] !== null) {
+      if (isTraversable(result[key])) {
         id = addIdSymbolsToResult(result[key], result[idSymbol], id);
       }
     });
@@ -54,11 +65,11 @@ export function addIdSymbolsToResult(result: any, parentId?: number, startId = 1
 export function stripIdSymbolsFromResult(result: any) {
   if (Array.isArray(result)) {
     result.forEach((item) => {
-      if (typeof item === "object" && item !== null) {
+      if (isTraversable(item)) {
         stripIdSymbolsFromObject(item);
 
         Object.getOwnPropertyNames(item).forEach((key) => {
-          if (typeof item[key] === "object" && item[key] !== null) {
+          if (isTraversable(item[key])) {
             stripIdSymbolsFromResult(item[key]);
           }
         });
@@ -67,11 +78,11 @@ export function stripIdSymbolsFromResult(result: any) {
     return;
   }
 
-  if (typeof result === "object" && result !== null) {
+  if (isTraversable(result)) {
     stripIdSymbolsFromObject(result);
 
     Object.getOwnPropertyNames(result).forEach((key) => {
-      if (typeof result[key] === "object" && result[key] !== null) {
+      if (isTraversable(result[key])) {
         stripIdSymbolsFromResult(result[key]);
       }
     });
